@@ -1,0 +1,5 @@
+#!/usr/local/bin/ruby
+
+require "serverless-tools"
+
+ServerlessTools::CLI.start(ARGV)
