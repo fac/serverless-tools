@@ -1,0 +1,11 @@
+example_function_one_v1:
+  repo: serverless-tools
+  s3_archive_name: function.zip
+  handler_file: handler_one.rb
+  bucket: freeagent-lambda-example-scripts
+
+example_function_two_v1:
+  repo: serverless-tools
+  s3_archive_name: function.zip
+  handler_file: handler_two.rb
+  bucket: freeagent-lambda-example-scripts

@@ -1,0 +1,11 @@
+name: "Deployer"
+description: "Deploy Lambda Assets and Functions"
+inputs:
+  action: # Which deploy action to run
+    description: "which action to run (build, push, update, deploy)"
+    required: true
+runs:
+  using: "docker"
+  image: "../../Dockerfile"
+  args:
+    - ${{ inputs.action }}

@@ -1,0 +1,12 @@
+name: "Comment"
+description: "Comments which functions have been deployed on a Github Issue"
+inputs:
+  functions:
+    description: "Hash of functions"
+    required: true
+runs:
+  using: "docker"
+  image: "../../Dockerfile"
+  entrypoint: "lib/comment.rb"
+  args:
+    - ${{ inputs.functions }}

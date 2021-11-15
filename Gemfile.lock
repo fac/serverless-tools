@@ -1,0 +1,75 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    ast (2.4.2)
+    aws-eventstream (1.1.1)
+    aws-partitions (1.528.0)
+    aws-sdk-core (3.122.1)
+      aws-eventstream (~> 1, >= 1.0.2)
+      aws-partitions (~> 1, >= 1.525.0)
+      aws-sigv4 (~> 1.1)
+      jmespath (~> 1.0)
+    aws-sdk-kms (1.51.0)
+      aws-sdk-core (~> 3, >= 3.122.0)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-lambda (1.67.0)
+      aws-sdk-core (~> 3, >= 3.119.0)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-s3 (1.101.0)
+      aws-sdk-core (~> 3, >= 3.120.0)
+      aws-sdk-kms (~> 1)
+      aws-sigv4 (~> 1.1)
+    aws-sigv4 (1.2.4)
+      aws-eventstream (~> 1, >= 1.0.2)
+    byebug (11.1.3)
+    coderay (1.1.3)
+    jmespath (1.4.0)
+    method_source (1.0.0)
+    minitest (5.14.4)
+    mocha (1.13.0)
+    parallel (1.20.1)
+    parser (3.0.2.0)
+      ast (~> 2.4.1)
+    power_assert (2.0.0)
+    pry (0.13.1)
+      coderay (~> 1.1)
+      method_source (~> 1.0)
+    pry-byebug (3.9.0)
+      byebug (~> 11.0)
+      pry (~> 0.13.0)
+    rainbow (3.0.0)
+    rake (13.0.6)
+    regexp_parser (2.1.1)
+    rexml (3.2.5)
+    rubocop (1.18.4)
+      parallel (~> 1.10)
+      parser (>= 3.0.0.0)
+      rainbow (>= 2.2.2, < 4.0)
+      regexp_parser (>= 1.8, < 3.0)
+      rexml
+      rubocop-ast (>= 1.8.0, < 2.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (>= 1.4.0, < 3.0)
+    rubocop-ast (1.9.1)
+      parser (>= 3.0.1.1)
+    ruby-progressbar (1.11.0)
+    test-unit (3.4.4)
+      power_assert
+    unicode-display_width (2.0.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  aws-sdk-lambda
+  aws-sdk-s3
+  minitest
+  mocha
+  pry
+  pry-byebug
+  rake
+  rubocop
+  test-unit
+
+BUNDLED WITH
+   2.1.4
