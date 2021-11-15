@@ -4,7 +4,7 @@ require_relative "./deployer/aws_lambda_config"
 require_relative "./deployer/deployer"
 
 module Deployer
-  CONFIG_FILE = "functions.yml"
+  CONFIG_FILE = ENV["GITHUB_WORKSPACE"] ? "#{ENV["GITHUB_WORKSPACE"]}/functions.yml" : "functions.yml"
 
   def self.deploy(action:, function: nil)
     raise "Expected to receive action but action was empty" if action.nil? || action.empty?

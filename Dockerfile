@@ -2,14 +2,16 @@ FROM ruby:2.7-alpine3.14
 
 RUN apk --no-cache add zip
 
-WORKDIR /github/workspace
+RUN mkdir /servless-tools
 
-COPY Gemfile Gemfile
-COPY Gemfile.lock Gemfile.lock
+WORKDIR /serverless-tools
+
+COPY Gemfile /serverless-tools/Gemfile
+COPY Gemfile.lock /severless-tools/Gemfile.lock
 
 RUN bundle config set without 'development' 'test'
 RUN bundle install
 
-COPY lib lib
+COPY lib /serverless-tools/lib
 
-ENTRYPOINT ["bundle", "exec", "ruby", "lib/deployer.rb"]
+ENTRYPOINT ["bundle", "exec", "ruby", "/serverless-tools/lib/deployer.rb"]
