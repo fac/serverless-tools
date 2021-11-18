@@ -1,15 +1,15 @@
-FROM ruby:2.7-alpine3.14
+FROM ruby:2.7-slim-buster
 
-RUN apk --no-cache add zip
+RUN apt-get update -y
+RUN apt-get install -y git zip
 
-WORKDIR /github/workspace
+COPY . .
 
-COPY Gemfile Gemfile
-COPY Gemfile.lock Gemfile.lock
-
-RUN bundle config set without 'development' 'test'
 RUN bundle install
+RUN bundle exec rake install
+RUN echo $(gem env)
+RUN echo $(gem list)
 
-COPY lib lib
+COPY entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT ["bundle", "exec", "ruby", "lib/deployer.rb"]
+ENTRYPOINT ["/entrypoint.sh"]
