@@ -34,7 +34,7 @@ Gem::Specification.new do |spec|
 
   spec.post_install_message = "Serverless tools, and beyond!"
 
-  spec.add_development_dependency "bundler", "~> 2.1.4"
+  spec.add_development_dependency "bundler", "~> 2.2.31"
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rubocop"
 
