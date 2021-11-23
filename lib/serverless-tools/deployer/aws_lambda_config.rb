@@ -28,7 +28,7 @@ module ServerlessTools
       attr_reader :repo
 
       def git_sha
-        (ENV["GITHUB_SHA"] || (`git rev-parse HEAD`)).strip
+        (`git rev-parse HEAD`).strip
       end
     end
   end
