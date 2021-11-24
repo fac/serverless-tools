@@ -42,10 +42,8 @@ describe "AwsLambdaFunction" do
 
       lambda_function = ServerlessTools::Deployer::AwsLambdaFunction.new(config, client: lambda_client)
 
-      lambda_function.expects(:puts).with("")
-      lambda_function.expects(:puts).with("::set-output name=#{function_name}::Successful")
-      lambda_function.expects(:puts).with("\\`#{function_name}\\` function update was Successful")
-      lambda_function.expects(:puts).with("> updated with #{key}")
+      lambda_function.expects(:puts).with("::set-output name=#{function_name}_status::Successful")
+      lambda_function.expects(:puts).with("::set-output name=#{function_name}_key::serverless-tools/deployments/1234567890/example_function_one_v1/function.zip")
 
       lambda_function.update_code(object)
     end
@@ -57,7 +55,6 @@ describe "AwsLambdaFunction" do
 
       lambda_function = ServerlessTools::Deployer::AwsLambdaFunction.new(config, client: lambda_client)
 
-      lambda_function.expects(:puts).with("")
       lambda_function.expects(:puts).with("::warning:: Not updating #{function_name} as key does not exist!")
       lambda_function.expects(:puts).with("::warning:: key: #{key}")
 
@@ -74,11 +71,7 @@ describe "AwsLambdaFunction" do
 
         lambda_function = ServerlessTools::Deployer::AwsLambdaFunction.new(config, client: lambda_client)
 
-        lambda_function.expects(:puts).with("")
         lambda_function.expects(:puts).with("::error:: An error occured when updating #{function_name} Error")
-        lambda_function.expects(:puts).with("An error occured when updating \\`#{function_name}\\`")
-        lambda_function.expects(:puts).with("> attempted to update with #{key}")
-        lambda_function.expects(:puts).with("> error message: Error")
 
         lambda_function.update_code(object)
       end
