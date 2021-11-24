@@ -3,10 +3,11 @@ AllCops:
   Include:
     - "**/Gemfile"
     - "**/lib/**.rb"
+    - "**/lib/**/**.rb"
+    - "**/bin/**.rb"
     - "**/test/**.rb"
-    - "**/features/**/**.rb"
+    - "**/test/**/**.rb"
     - "**.rb"
-    - "**/producer/**.rb"
   TargetRubyVersion: 2.7
 
 #################### Layout ################################

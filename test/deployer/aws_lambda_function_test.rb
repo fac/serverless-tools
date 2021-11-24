@@ -45,7 +45,7 @@ describe "AwsLambdaFunction" do
       lambda_function = ServerlessTools::Deployer::AwsLambdaFunction.new(config, client: lambda_client)
 
       lambda_function.expects(:puts).with("::set-output name=#{function_name}_status::Successful")
-      lambda_function.expects(:puts).with("::set-output name=#{function_name}_key::serverless-tools/deployments/1234567890/example_function_one_v1/function.zip")
+      lambda_function.expects(:puts).with("::set-output name=#{function_name}_key::#{key}")
 
       lambda_function.update_code(object)
     end

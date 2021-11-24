@@ -112,7 +112,11 @@ lambda_client: lambda_client)
     it "does not update lambda code if code object does not exist" do
       lambda_client.expects(:update_function_code).never
 
-      uploader = ServerlessTools::Deployer::Deployer.new(config, s3_client: s3_object_does_not_exist, lambda_client: lambda_client)
+      uploader = ServerlessTools::Deployer::Deployer.new(
+        config,
+        s3_client: s3_object_does_not_exist,
+        lambda_client: lambda_client
+      )
       uploader.update
     end
   end
