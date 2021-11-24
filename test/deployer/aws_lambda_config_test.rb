@@ -3,10 +3,12 @@ require "mocha/minitest"
 require "serverless-tools/deployer/aws_lambda_config"
 
 describe "AwsLambdaConfig" do
+  let(:git) { mock() }
   subject do
     ServerlessTools::Deployer::AwsLambdaConfig.new(
       filename: "test/fixtures/functions.yml",
-      function_name: "example_function_one_v1"
+      function_name: "example_function_one_v1",
+      git: git,
     )
   end
 
@@ -19,9 +21,7 @@ describe "AwsLambdaConfig" do
 
   describe "#key" do
     it "generates the expected s3 key for a lambda function" do
-      # git_sha shells out to get the current sha, for this test we assume
-      # that it always gets the correct sha so we mock it out with a known value
-      subject.expects(:git_sha).returns("1234567890")
+      git.expects(:sha).returns("1234567890")
       assert_equal(
         "serverless-tools/deployments/1234567890/example_function_one_v1/function.zip",
         subject.s3_key

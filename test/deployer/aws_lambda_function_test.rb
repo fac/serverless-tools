@@ -13,16 +13,18 @@ describe "AwsLambdaFunction" do
   let(:config) do
     ServerlessTools::Deployer::AwsLambdaConfig.new(
       filename: "test/fixtures/functions.yml",
-      function_name: function_name
+      function_name: function_name,
+      git: git,
     )
   end
 
   let(:object) { mock }
   let(:bucket) { mock }
+  let(:git) { mock }
 
   describe "#update_code" do
     before do
-      config.stubs(:git_sha).returns("1234567890")
+      git.stubs(:sha).returns("1234567890")
       object.stubs(:key).returns(config.s3_key)
       object.stubs(:bucket).returns(bucket)
       bucket.stubs(:name).returns(config.bucket)

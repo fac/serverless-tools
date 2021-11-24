@@ -22,16 +22,22 @@ describe "Deployer" do
 
   let(:lambda_client) { Aws::Lambda::Client.new(stub_responses: true) }
 
+  let(:git) { mock() }
+
   let(:config) do
     ServerlessTools::Deployer::AwsLambdaConfig.new(
       filename: "test/fixtures/functions.yml",
-      function_name: "example_function_one_v1"
+      function_name: "example_function_one_v1",
+      git: git,
     )
+  end
+
+  before do
+    git.stubs(:sha).returns("1234567890")
   end
 
   describe "#push" do
     it "uploads file to S3 object when object doesn't exist" do
-      config.expects(:git_sha).returns("1234567890")
 
       uploader = ServerlessTools::Deployer::Deployer.new(config, s3_client: s3_object_does_not_exist,
 lambda_client: lambda_client)
@@ -75,8 +81,6 @@ lambda_client: lambda_client)
     end
 
     it "does not upload file to S3 object when object exists" do
-      config.expects(:git_sha).returns("1234567890")
-
       uploader = ServerlessTools::Deployer::Deployer.new(config, s3_client: s3_object_does_exist,
 lambda_client: lambda_client)
       uploader.push
@@ -91,7 +95,6 @@ lambda_client: lambda_client)
 
   describe "#update" do
     it "updates lambda code if code object exists" do
-      config.expects(:git_sha).returns("1234567890")
       lambda_client
         .expects(:update_function_code)
         .with(
@@ -107,7 +110,6 @@ lambda_client: lambda_client)
     end
 
     it "does not update lambda code if code object does not exist" do
-      config.expects(:git_sha).returns("1234567890")
       lambda_client.expects(:update_function_code).never
 
       uploader = ServerlessTools::Deployer::Deployer.new(config, s3_client: s3_object_does_not_exist, lambda_client: lambda_client)
