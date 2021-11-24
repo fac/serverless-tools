@@ -9,7 +9,6 @@ module ServerlessTools
       end
 
       def update_code(object)
-        puts ""
         unless object.exists?
           puts "::warning:: Not updating #{config.function_name} as key does not exist!"
           puts "::warning:: key: #{object.key}"
@@ -20,15 +19,10 @@ module ServerlessTools
           s3_bucket: object.bucket.name,
           s3_key: object.key,
         })
-        puts "::set-output name=#{resp[:function_name]}::#{resp[:last_update_status]}"
-
-        puts "\\`#{resp[:function_name]}\\` function update was #{resp[:last_update_status]}"
-        puts "> updated with #{object.key}"
+        puts "::set-output name=#{resp[:function_name]}_status::#{resp[:last_update_status]}"
+        puts "::set-output name=#{resp[:function_name]}_key::#{object.key}"
       rescue Aws::Lambda::Errors::ServiceError => e
         puts "::error:: An error occured when updating #{config.function_name} #{e.message}"
-        puts "An error occured when updating \\`#{config.function_name}\\`"
-        puts "> attempted to update with #{object.key}"
-        puts "> error message: #{e.message}"
       end
 
       private

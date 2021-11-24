@@ -7,7 +7,7 @@ module ServerlessTools
     desc "comment", "create Github Issue comment body"
     method_option :functions, :type => :string, :aliases => "-f", :default => "{}"
     def comment
-      comment = Comment.build(options[:functions])
+      comment = Comment.new.build(options[:functions])
       puts "::set-output name=comment::#{comment}"
     end
 
