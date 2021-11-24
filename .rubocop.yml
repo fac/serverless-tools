@@ -2,11 +2,9 @@ AllCops:
   DisabledByDefault: true
   Include:
     - "**/Gemfile"
-    - "**/lib/**.rb"
-    - "**/lib/**/**.rb"
-    - "**/bin/**.rb"
-    - "**/test/**.rb"
-    - "**/test/**/**.rb"
+    - "**/lib/**/*"
+    - "**/test/**/*"
+    - "**/bin/**"
     - "**.rb"
   TargetRubyVersion: 2.7
 
