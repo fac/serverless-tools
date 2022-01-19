@@ -11,21 +11,20 @@ describe "AwsLambdaFunction" do
   let(:key) { "serverless-tools/deployments/1234567890/#{function_name}/function.zip" }
 
   let(:config) do
-    ServerlessTools::Deployer::AwsLambdaConfig.new(
-      filename: "test/fixtures/functions.yml",
-      function_name: function_name,
-      git: git,
+    ServerlessTools::Deployer::FunctionConfig.new(
+      name: "example_function_one_v1",
+      bucket: "freeagent-lambda-example-scripts",
+      repo: "serverless-tools",
+      s3_archive_name: "function.zip"
     )
   end
 
   let(:object) { mock }
   let(:bucket) { mock }
-  let(:git) { mock }
 
   describe "#update_code" do
     before do
-      git.stubs(:sha).returns("1234567890")
-      object.stubs(:key).returns(config.s3_key)
+      object.stubs(:key).returns(config.s3_key(git_sha: "1234567890"))
       object.stubs(:bucket).returns(bucket)
       bucket.stubs(:name).returns(config.bucket)
     end

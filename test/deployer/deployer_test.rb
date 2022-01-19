@@ -5,7 +5,7 @@ require "aws-sdk-lambda"
 require "aws-sdk-s3"
 
 require "serverless-tools/deployer/deployer"
-require "serverless-tools/deployer/aws_lambda_config"
+require "serverless-tools/deployer/function_config"
 
 describe "Deployer" do
   let(:s3_object_does_not_exist) do
@@ -25,10 +25,11 @@ describe "Deployer" do
   let(:git) { mock() }
 
   let(:config) do
-    ServerlessTools::Deployer::AwsLambdaConfig.new(
-      filename: "test/fixtures/functions.yml",
-      function_name: "example_function_one_v1",
-      git: git,
+    ServerlessTools::Deployer::FunctionConfig.new(
+      name: "example_function_one_v1",
+      bucket: "freeagent-lambda-example-scripts",
+      repo: "serverless-tools",
+      s3_archive_name: "function.zip"
     )
   end
 
@@ -39,8 +40,12 @@ describe "Deployer" do
   describe "#push" do
     it "uploads file to S3 object when object doesn't exist" do
 
-      uploader = ServerlessTools::Deployer::Deployer.new(config, s3_client: s3_object_does_not_exist,
-lambda_client: lambda_client)
+      uploader = ServerlessTools::Deployer::Deployer.new(
+        config,
+        s3_client: s3_object_does_not_exist,
+        lambda_client: lambda_client,
+        git: git,
+      )
       uploader.build
       uploader.push
       File.delete(config.local_filename) if File.exist?(config.local_filename)
@@ -81,8 +86,12 @@ lambda_client: lambda_client)
     end
 
     it "does not upload file to S3 object when object exists" do
-      uploader = ServerlessTools::Deployer::Deployer.new(config, s3_client: s3_object_does_exist,
-lambda_client: lambda_client)
+      uploader = ServerlessTools::Deployer::Deployer.new(
+        config,
+        s3_client: s3_object_does_exist,
+        lambda_client: lambda_client,
+        git: git
+      )
       uploader.push
 
       # see comments above for checking the requests
@@ -104,8 +113,12 @@ lambda_client: lambda_client)
           )
         ).returns({ function_name: "test-function", last_update_status: "Successful" })
 
-      uploader = ServerlessTools::Deployer::Deployer.new(config, s3_client: s3_object_does_exist,
-lambda_client: lambda_client)
+      uploader = ServerlessTools::Deployer::Deployer.new(
+        config,
+        s3_client: s3_object_does_exist,
+        lambda_client: lambda_client,
+        git: git,
+      )
       uploader.update
     end
 
@@ -115,7 +128,8 @@ lambda_client: lambda_client)
       uploader = ServerlessTools::Deployer::Deployer.new(
         config,
         s3_client: s3_object_does_not_exist,
-        lambda_client: lambda_client
+        lambda_client: lambda_client,
+        git: git
       )
       uploader.update
     end
