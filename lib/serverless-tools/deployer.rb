@@ -7,10 +7,12 @@ module ServerlessTools
   module Deployer
     CONFIG_FILE = ENV["GITHUB_WORKSPACE"] ? "#{ENV["GITHUB_WORKSPACE"]}/functions.yml" : "functions.yml"
 
-    def self.deploy(action:, function: nil)
+    def self.deploy(action:, function: nil, filename: nil)
       raise "Expected to receive action but action was empty" if action.nil? || action.empty?
 
-      config_loader = YamlConfigLoader.new(filename: CONFIG_FILE)
+      config_loader = YamlConfigLoader.new(
+        filename: filename.nil? ? CONFIG_FILE : filename
+      )
 
       lambdas_to_deploy = function ? [function] : config_loader.functions
 

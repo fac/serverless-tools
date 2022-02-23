@@ -12,8 +12,9 @@ module ServerlessTools
     end
 
     desc "deploy", "publishes and deploys the specified lambda functions"
+    method_option :filename, :type => :string, :aliases => "-f"
     def deploy(action, function=nil)
-      Deployer.deploy(action: action, function: function)
+      Deployer.deploy(action: action, function: function, filename: options[:filename])
     end
   end
 end
