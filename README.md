@@ -38,9 +38,9 @@ The deployer takes 2 arguments:
 The deployer uses the current git HEAD for which sha to push and update.
 
 ```zsh
-  serverless deploy build # Zips the file - assumes bundle install has been run and deps are in a vendor folder
-  serverless deploy push # Push the zip(s) to S3
-  serverless deploy update # Update the lambda function
+  serverless-tools deploy build # Zips the file - assumes bundle install has been run and deps are in a vendor folder
+  serverless-tools deploy push # Push the zip(s) to S3
+  serverless-tools deploy update # Update the lambda function
 ```
 
 ### Comment
@@ -49,7 +49,7 @@ The comment tool is intended to be used as a Github Action. It takes a json hash
 and prints a formatted string with the Github Action expression to set an output. This output can then used to comment in a Github Issue.
 
 ```zsh
-  serverless comment -f '{"function_name": "Success"}'
+  serverless-tools comment -f '{"function_name": "Success"}'
 ```
 ### Github Actions
 
