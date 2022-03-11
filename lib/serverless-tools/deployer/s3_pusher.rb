@@ -31,12 +31,12 @@ module ServerlessTools
       def object(config:)
         Aws::S3::Object.new(
           bucket_name: config.bucket,
-          key: s3_key(config: config, git_sha: git.sha),
+          key: s3_key(config: config),
           client: client
         )
       end
 
-      def s3_key(config:, git_sha:)
+      def s3_key(config:)
         "#{config.repo}/deployments/#{git.sha}/#{config.name}/#{config.s3_archive_name}"
       end
 
