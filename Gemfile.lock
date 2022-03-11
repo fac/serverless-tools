@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    serverless-tools (0.1.0)
+    serverless-tools (0.2.0)
       aws-sdk-lambda
       aws-sdk-s3
       thor
