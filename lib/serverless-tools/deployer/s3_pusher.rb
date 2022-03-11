@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "aws-sdk-s3"
+
 module ServerlessTools
   module Deployer
     class S3Pusher
