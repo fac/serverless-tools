@@ -7,6 +7,7 @@ require "serverless-tools/deployer/function_config"
 module ServerlessTools::Deployer
   describe "Deployer" do
     let(:pusher) { mock() }
+    let(:builder) { mock() }
     let(:updater) { mock() }
 
     let(:config) do
@@ -18,9 +19,29 @@ module ServerlessTools::Deployer
       )
     end
 
+    describe "#deploy" do
+      it "calls each member of the deployer class to deploy the function" do
+        deployer = Deployer.new(config, pusher: pusher, updater: updater, builder: builder)
+
+        builder.expects(:build).with(config: config)
+        pusher.expects(:push).with(config: config)
+        updater.expects(:update).with(config: config)
+
+        deployer.deploy
+      end
+    end
+
+    describe "#builder" do
+      it "calls the build method of the builder with the config" do
+        deployer = Deployer.new(config, pusher: pusher, updater: updater, builder: builder)
+        builder.expects(:build).with(config: config)
+        deployer.build
+      end
+    end
+
     describe "#push" do
-      it "calls the upload method of the uploader with the config" do
-        deployer = Deployer.new(config, pusher: pusher, updater: updater)
+      it "calls the push method of the pusher with the config" do
+        deployer = Deployer.new(config, pusher: pusher, updater: updater, builder: builder)
         pusher.expects(:push).with(config: config)
         deployer.push
       end
@@ -28,7 +49,7 @@ module ServerlessTools::Deployer
 
     describe "#update" do
       it "calls the update method of the updater with the config" do
-        deployer = Deployer.new(config, pusher: pusher, updater: updater)
+        deployer = Deployer.new(config, pusher: pusher, updater: updater, builder: builder)
         updater.expects(:update).with(config: config)
         deployer.update
       end
@@ -49,6 +70,7 @@ module ServerlessTools::Deployer
         assert_equal(result.class.name, "ServerlessTools::Deployer::Deployer")
         assert_equal(result.pusher.class.name, "ServerlessTools::Deployer::S3Pusher")
         assert_equal(result.updater.class.name, "ServerlessTools::Deployer::LambdaUpdater")
+        assert_equal(result.builder.class.name, "ServerlessTools::Deployer::RubyBuilder")
       end
     end
   end
