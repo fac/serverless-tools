@@ -5,7 +5,11 @@ module ServerlessTools
     class RubyBuilder
       def build(config:)
         `bundle`
-        `zip -r "#{config.local_filename}" #{config.handler_file} lib vendor/`
+        `zip -r "#{local_filename(config)}" #{config.handler_file} lib vendor/`
+      end
+
+      def local_filename(config)
+        "#{config.name}.zip"
       end
     end
   end

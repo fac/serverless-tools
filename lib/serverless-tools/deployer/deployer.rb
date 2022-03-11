@@ -39,13 +39,17 @@ module ServerlessTools
       end
 
       # Create for function should assemble the deployer
-      # based on the config. Here the assumed configuration
-      # for a ruby lambda with the assets in S3.
+      # based on the config.
       def self.create_for_function(config:)
-        pusher = S3Pusher.new(client: Aws::S3::Client.new, git: Git.new)
+        ruby_deployer(config)
+      end
+
+      def self.ruby_deployer(config)
+        builder = RubyBuilder.new()
+        pusher = S3Pusher.new(client: Aws::S3::Client.new, builder: builder, git: Git.new)
         self.new(
           config,
-          builder: RubyBuilder.new(),
+          builder: builder,
           pusher: pusher,
           updater: LambdaUpdater.new(pusher: pusher, client: Aws::Lambda::Client.new)
         )

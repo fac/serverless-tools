@@ -8,15 +8,25 @@ module ServerlessTools::Deployer
     let(:subject) { RubyBuilder.new }
     let(:config) { FunctionConfig.new(name: "function_one", handler_file: "handler_file") }
 
+    def assert_file_exists?(exists = true)
+      assert_equal(File.exist?(subject.local_filename(config)), exists)
+    end
+
     describe "#build" do
       it "creates a zip file for the ruby code" do
-        assert_equal(File.exist?(config.local_filename), false)
+        assert_file_exists?(false)
 
         subject.build(config: config)
 
-        assert_equal(File.exist?(config.local_filename), true)
+        assert_file_exists?(true)
 
-        File.delete(config.local_filename)
+        File.delete(subject.local_filename(config))
+      end
+
+      describe "#local_filename" do
+        it "generates the correct name for the local zip archive" do
+          assert_equal("function_one.zip", subject.local_filename(config))
+        end
       end
     end
   end

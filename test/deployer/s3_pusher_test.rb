@@ -11,14 +11,16 @@ module ServerlessTools::Deployer
     let(:config) do
       FunctionConfig.new(name: "filename", bucket: "test", s3_archive_name: "function.zip")
     end
-    let(:git) { mock() }
+    let(:git) { mock }
+    let(:builder) { mock }
 
     before do
       git.stubs(:sha).returns("1234567890")
+      builder.stubs(:local_filename).returns("filename.zip")
     end
 
     let(:object) { mock }
-    let(:subject) { S3Pusher.new(client: s3, git: git) }
+    let(:subject) { S3Pusher.new(client: s3, git: git, builder: builder) }
     let(:expected) do
       {
         s3_bucket: "test",
