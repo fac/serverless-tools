@@ -1,17 +1,21 @@
-require "aws-sdk-s3"
+# fronzen_string_literal: true
 
-require_relative "./s3_uploader.rb"
-require_relative "./aws_lambda_function.rb"
+require "aws-sdk-s3"
+require "aws-sdk-lambda"
+
+require_relative "./s3_pusher.rb"
+require_relative "./lambda_updater.rb"
 require_relative "../git"
 
 module ServerlessTools
   module Deployer
     class Deployer
-      def initialize(config, s3_client: Aws::S3::Client.new, lambda_client: Aws::Lambda::Client.new, git: Git.new)
+      attr_reader :config, :pusher, :updater
+
+      def initialize(config, pusher:, updater:)
         @config = config
-        @s3_client = s3_client
-        @lambda_client = lambda_client
-        @git = git
+        @pusher = pusher
+        @updater = updater
       end
 
       def build
@@ -19,11 +23,11 @@ module ServerlessTools
       end
 
       def push
-        S3Uploader.new(object).upload(config.local_filename)
+        pusher.push(config: config)
       end
 
       def update
-        AwsLambdaFunction.new(config, client: lambda_client).update_code(object)
+        updater.update(config: config)
       end
 
       def deploy
@@ -32,17 +36,14 @@ module ServerlessTools
         update
       end
 
-      private
-
-      def object
-        Aws::S3::Object.new(
-          bucket_name: config.bucket,
-          key: config.s3_key(git_sha: git.sha),
-          client: s3_client
+      def self.create_for_function(config:)
+        pusher = S3Pusher.new(client: Aws::S3::Client.new, git: Git.new)
+        self.new(
+          config,
+          pusher: pusher,
+          updater: LambdaUpdater.new(pusher: pusher, client: Aws::Lambda::Client.new)
         )
       end
-
-      attr_reader :config, :s3_client, :lambda_client, :git
     end
   end
 end

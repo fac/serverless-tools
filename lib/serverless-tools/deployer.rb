@@ -15,9 +15,7 @@ module ServerlessTools
       lambdas_to_deploy = function ? [function] : config_loader.functions
 
       deployers = lambdas_to_deploy.map do |function_name|
-        Deployer.new(
-          config_loader.lambda_config(function_name: function_name)
-        )
+        Deployer.create_for_function(config: config_loader.lambda_config(function_name: function_name))
       end
 
       run_action(action: action, deployers: deployers)
