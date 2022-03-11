@@ -3,6 +3,7 @@ require "mocha/minitest"
 
 require "serverless-tools/deployer/deployer"
 require "serverless-tools/deployer/function_config"
+require "serverless-tools/deployer/errors"
 
 module ServerlessTools::Deployer
   describe "Deployer" do
@@ -15,7 +16,8 @@ module ServerlessTools::Deployer
         name: "example_function_one_v1",
         bucket: "freeagent-lambda-example-scripts",
         repo: "serverless-tools",
-        s3_archive_name: "function.zip"
+        s3_archive_name: "function.zip",
+        handler_file: "handler.rb",
       )
     end
 
@@ -71,6 +73,18 @@ module ServerlessTools::Deployer
         assert_equal(result.pusher.class.name, "ServerlessTools::Deployer::S3Pusher")
         assert_equal(result.updater.class.name, "ServerlessTools::Deployer::LambdaUpdater")
         assert_equal(result.builder.class.name, "ServerlessTools::Deployer::RubyBuilder")
+      end
+
+      describe "when the config can't be infered" do
+        let(:config) do
+          FunctionConfig.new()
+        end
+
+        it "raises a RuntimeNotSupported error" do
+          assert_raises(RuntimeNotSupported) do
+            Deployer.create_for_function(config: config)
+          end
+        end
       end
     end
   end

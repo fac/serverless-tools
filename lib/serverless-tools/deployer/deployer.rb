@@ -3,10 +3,11 @@
 require "aws-sdk-s3"
 require "aws-sdk-lambda"
 
+require_relative "../git"
 require_relative "./s3_pusher"
 require_relative "./lambda_updater"
 require_relative "./ruby_builder"
-require_relative "../git"
+require_relative "./errors"
 
 module ServerlessTools
   module Deployer
@@ -38,10 +39,10 @@ module ServerlessTools
         update
       end
 
-      # Create for function should assemble the deployer
-      # based on the config.
       def self.create_for_function(config:)
-        ruby_deployer(config)
+        send("#{config.runtime}_deployer", config)
+      rescue NoMethodError
+        raise RuntimeNotSupported.new(config: config)
       end
 
       def self.ruby_deployer(config)

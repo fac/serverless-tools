@@ -2,6 +2,12 @@
 
 module ServerlessTools
   module Deployer
+    class RuntimeNotSupported < RuntimeError
+      def initialize(config:)
+        super("Could not infer lambda runtime from #{config}")
+      end
+    end
+
     class ConfigFileNotFound < RuntimeError
       def initialize(filename:)
         super("Could not find config file '#{filename}'")

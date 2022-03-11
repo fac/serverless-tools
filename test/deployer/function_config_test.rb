@@ -22,6 +22,12 @@ module ServerlessTools
         assert_equal(subject.handler_file, "handler_one.rb")
         assert_equal(subject.repo, "serverless-tools")
       end
+
+      describe "#runtime" do
+        it "infers a runtime based on the config" do
+          assert_equal(subject.runtime, "ruby")
+        end
+      end
     end
   end
 end
