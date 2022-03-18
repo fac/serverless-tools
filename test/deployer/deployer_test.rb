@@ -66,7 +66,7 @@ module ServerlessTools::Deployer
         Aws::Lambda::Client.stubs(:new).returns(lambda_client)
       end
 
-      it "returns a deployer with an pusher and updater" do
+      it "returns a deployer with a pusher, updater, and builder" do
         result = Deployer.create_for_function(config: config)
 
         assert_equal(result.class.name, "ServerlessTools::Deployer::Deployer")
