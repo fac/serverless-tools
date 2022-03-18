@@ -12,10 +12,9 @@ require_relative "./errors"
 module ServerlessTools
   module Deployer
     class FunctionDeployer
-      attr_reader :config, :builder, :pusher, :updater
+      attr_reader :builder, :pusher, :updater
 
-      def initialize(config, builder:, pusher:, updater:)
-        @config = config
+      def initialize(builder:, pusher:, updater:)
         @builder = builder
         @pusher = pusher
         @updater = updater
@@ -47,7 +46,6 @@ module ServerlessTools
 
       def self.ruby_deployer(config)
         self.new(
-          config,
           builder: RubyBuilder.new(config: config),
           pusher: S3Pusher.new(client: Aws::S3::Client.new, git: Git.new, config: config),
           updater: LambdaUpdater.new(client: Aws::Lambda::Client.new, config: config)

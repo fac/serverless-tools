@@ -25,7 +25,7 @@ module ServerlessTools::Deployer
 
     describe "#deploy" do
       it "calls each member of the deployer class to deploy the function" do
-        deployer = FunctionDeployer.new(config, pusher: pusher, updater: updater, builder: builder)
+        deployer = FunctionDeployer.new(pusher: pusher, updater: updater, builder: builder)
 
         builder.expects(:build)
         builder.expects(:output).returns({ local_filename: key })
@@ -41,7 +41,7 @@ module ServerlessTools::Deployer
 
     describe "#build" do
       it "calls the build method of the builder with the config" do
-        deployer = FunctionDeployer.new(config, pusher: pusher, updater: updater, builder: builder)
+        deployer = FunctionDeployer.new(pusher: pusher, updater: updater, builder: builder)
         builder.expects(:build)
         deployer.build
       end
@@ -49,7 +49,7 @@ module ServerlessTools::Deployer
 
     describe "#push" do
       it "calls the push method of the pusher with the config" do
-        deployer = FunctionDeployer.new(config, pusher: pusher, updater: updater, builder: builder)
+        deployer = FunctionDeployer.new(pusher: pusher, updater: updater, builder: builder)
 
         builder.expects(:output).returns({ local_filename: key })
         pusher.expects(:push).with(local_filename: key)
@@ -60,7 +60,7 @@ module ServerlessTools::Deployer
 
     describe "#update" do
       it "calls the update method of the updater with the config" do
-        deployer = FunctionDeployer.new(config, pusher: pusher, updater: updater, builder: builder)
+        deployer = FunctionDeployer.new(pusher: pusher, updater: updater, builder: builder)
 
         pusher.expects(:output).returns({ s3_key: key, s3_bucket: bucket })
 
