@@ -3,12 +3,23 @@
 module ServerlessTools
   module Deployer
     class RubyBuilder
-      def build(config:)
-        `bundle`
-        `zip -r "#{local_filename(config)}" #{config.handler_file} lib vendor/`
+      attr_reader :config
+      def initialize(config:)
+        @config = config
       end
 
-      def local_filename(config)
+      def build
+        `bundle`
+        `zip -r "#{local_filename}" #{config.handler_file} lib vendor/`
+      end
+
+      def output
+        {
+          local_filename: local_filename,
+        }
+      end
+
+      def local_filename
         "#{config.name}.zip"
       end
     end

@@ -22,11 +22,11 @@ module ServerlessTools
       end
 
       def build
-        builder.build(config: config)
+        builder.build
       end
 
       def push
-        pusher.push(config: config)
+        pusher.push(**builder.output)
       end
 
       def update
@@ -46,11 +46,10 @@ module ServerlessTools
       end
 
       def self.ruby_deployer(config)
-        builder = RubyBuilder.new()
-        pusher = S3Pusher.new(client: Aws::S3::Client.new, builder: builder, git: Git.new)
+        pusher = S3Pusher.new(client: Aws::S3::Client.new, git: Git.new, config: config)
         self.new(
           config,
-          builder: builder,
+          builder: RubyBuilder.new(config: config),
           pusher: pusher,
           updater: LambdaUpdater.new(pusher: pusher, client: Aws::Lambda::Client.new)
         )

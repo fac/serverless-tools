@@ -25,8 +25,9 @@ module ServerlessTools::Deployer
       it "calls each member of the deployer class to deploy the function" do
         deployer = Deployer.new(config, pusher: pusher, updater: updater, builder: builder)
 
-        builder.expects(:build).with(config: config)
-        pusher.expects(:push).with(config: config)
+        builder.expects(:build)
+        builder.expects(:output).returns({ local_filename: "function.zip" })
+        pusher.expects(:push).with(local_filename: "function.zip")
         updater.expects(:update).with(config: config)
 
         deployer.deploy
@@ -36,7 +37,7 @@ module ServerlessTools::Deployer
     describe "#build" do
       it "calls the build method of the builder with the config" do
         deployer = Deployer.new(config, pusher: pusher, updater: updater, builder: builder)
-        builder.expects(:build).with(config: config)
+        builder.expects(:build)
         deployer.build
       end
     end
@@ -44,7 +45,8 @@ module ServerlessTools::Deployer
     describe "#push" do
       it "calls the push method of the pusher with the config" do
         deployer = Deployer.new(config, pusher: pusher, updater: updater, builder: builder)
-        pusher.expects(:push).with(config: config)
+        builder.expects(:output).returns({ local_filename: "function.zip" })
+        pusher.expects(:push).with(local_filename: "function.zip")
         deployer.push
       end
     end

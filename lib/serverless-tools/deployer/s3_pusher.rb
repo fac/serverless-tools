@@ -5,44 +5,44 @@ require "aws-sdk-s3"
 module ServerlessTools
   module Deployer
     class S3Pusher
-      def initialize(client:, builder:, git:)
+      def initialize(client:, git:, config:)
         @client = client
-        @builder = builder
         @git = git
+        @config = config
       end
 
-      def push(config:)
-        object = object(config: config)
+      def push(local_filename:)
         if object.exists?
           puts "Did not upload #{object.key} as it already exists!"
         else
-          object.upload_file(builder.local_filename(config))
+          object.upload_file(local_filename)
         end
-        object_attributes(object)
+        output
       end
 
-      private
-
-      def object_attributes(object)
+      def output
+        return {} unless object.exists?
         {
           s3_bucket: object.bucket.name,
           s3_key: object.key,
         }
       end
 
-      def object(config:)
-        Aws::S3::Object.new(
+      private
+
+      def object
+        @object ||= Aws::S3::Object.new(
           bucket_name: config.bucket,
-          key: s3_key(config: config),
+          key: s3_key,
           client: client
         )
       end
 
-      def s3_key(config:)
+      def s3_key
         "#{config.repo}/deployments/#{git.sha}/#{config.name}/#{config.s3_archive_name}"
       end
 
-      attr_reader :client, :builder, :git
+      attr_reader :client, :git, :config
     end
   end
 end
