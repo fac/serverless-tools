@@ -10,13 +10,15 @@ module ServerlessTools::Deployer
     let(:pusher) { mock() }
     let(:builder) { mock() }
     let(:updater) { mock() }
+    let(:bucket) { "freeagent-lambda-example-scripts" }
+    let(:key) { "function.zip" }
 
     let(:config) do
       FunctionConfig.new(
         name: "example_function_one_v1",
-        bucket: "freeagent-lambda-example-scripts",
+        bucket: bucket,
         repo: "serverless-tools",
-        s3_archive_name: "function.zip",
+        s3_archive_name: key,
         handler_file: "handler.rb",
       )
     end
@@ -26,9 +28,12 @@ module ServerlessTools::Deployer
         deployer = Deployer.new(config, pusher: pusher, updater: updater, builder: builder)
 
         builder.expects(:build)
-        builder.expects(:output).returns({ local_filename: "function.zip" })
-        pusher.expects(:push).with(local_filename: "function.zip")
-        updater.expects(:update).with(config: config)
+        builder.expects(:output).returns({ local_filename: key })
+
+        pusher.expects(:push).with(local_filename: key)
+        pusher.expects(:output).returns({ s3_key: key, s3_bucket: bucket })
+
+        updater.expects(:update).with(s3_key: key, s3_bucket: bucket)
 
         deployer.deploy
       end
@@ -45,8 +50,10 @@ module ServerlessTools::Deployer
     describe "#push" do
       it "calls the push method of the pusher with the config" do
         deployer = Deployer.new(config, pusher: pusher, updater: updater, builder: builder)
-        builder.expects(:output).returns({ local_filename: "function.zip" })
-        pusher.expects(:push).with(local_filename: "function.zip")
+
+        builder.expects(:output).returns({ local_filename: key })
+        pusher.expects(:push).with(local_filename: key)
+
         deployer.push
       end
     end
@@ -54,7 +61,11 @@ module ServerlessTools::Deployer
     describe "#update" do
       it "calls the update method of the updater with the config" do
         deployer = Deployer.new(config, pusher: pusher, updater: updater, builder: builder)
-        updater.expects(:update).with(config: config)
+
+        pusher.expects(:output).returns({ s3_key: key, s3_bucket: bucket })
+
+        updater.expects(:update).with(s3_key: key, s3_bucket: bucket)
+
         deployer.update
       end
     end

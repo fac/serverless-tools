@@ -22,8 +22,6 @@ module ServerlessTools::Deployer
       )
     end
 
-    let(:pusher) { mock }
-
     describe "#update_code" do
       it "updates lambda code" do
         lambda_client
@@ -35,14 +33,12 @@ module ServerlessTools::Deployer
             )
           ).returns({ function_name: function_name, last_update_status: "Successful" })
 
-        lambda_function = LambdaUpdater.new(client: lambda_client, pusher: pusher)
+        lambda_function = LambdaUpdater.new(client: lambda_client, config: config)
 
-        push_response = { s3_key: key, s3_bucket: bucket }
-        pusher.expects(:push).with(config: config).returns(push_response)
-
+        options = { s3_key: key, s3_bucket: bucket }
         lambda_function.expects(:puts).with("::set-output name=#{function_name}_status::Successful")
 
-        lambda_function.update(config: config)
+        lambda_function.update(options)
       end
     end
   end

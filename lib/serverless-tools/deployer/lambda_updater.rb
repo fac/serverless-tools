@@ -3,16 +3,15 @@
 module ServerlessTools
   module Deployer
     class LambdaUpdater
-      def initialize(pusher:, client:)
+      def initialize(client:, config:)
         @client = client
-        @pusher = pusher
+        @config = config
       end
 
-      def update(config:)
-        remote_assets = pusher.push(config: config)
-        remote_assets[:function_name] = config.name
+      def update(options)
+        options[:function_name] = config.name
 
-        response = client.update_function_code(remote_assets)
+        response = client.update_function_code(options)
 
         puts "::set-output name=#{response[:function_name]}_status::#{response[:last_update_status]}"
       rescue Aws::Lambda::Errors::ServiceError => e
@@ -21,7 +20,7 @@ module ServerlessTools
 
       private
 
-      attr_reader :pusher, :client
+      attr_reader :client, :config
     end
   end
 end
