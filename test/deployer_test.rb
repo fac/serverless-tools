@@ -15,7 +15,7 @@ module ServerlessTools
     describe "#deployer" do
       before do
         Deployer::YamlConfigLoader.stubs(:new).with(filename: filename).returns(config)
-        Deployer::Deployer.stubs(:create_for_function).returns(deployer)
+        Deployer::FunctionDeployer.stubs(:create_for_function).returns(deployer)
 
         config.expects(:lambda_config).with(function_name: function)
         deployer.expects(:build)

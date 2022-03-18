@@ -11,7 +11,7 @@ require_relative "./errors"
 
 module ServerlessTools
   module Deployer
-    class Deployer
+    class FunctionDeployer
       attr_reader :config, :builder, :pusher, :updater
 
       def initialize(config, builder:, pusher:, updater:)
@@ -30,7 +30,7 @@ module ServerlessTools
       end
 
       def update
-        updater.update(**pusher.output)
+        updater.update(pusher.output)
       end
 
       def deploy

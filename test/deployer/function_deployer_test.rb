@@ -1,12 +1,12 @@
 require "minitest/autorun"
 require "mocha/minitest"
 
-require "serverless-tools/deployer/deployer"
+require "serverless-tools/deployer/function_deployer"
 require "serverless-tools/deployer/function_config"
 require "serverless-tools/deployer/errors"
 
 module ServerlessTools::Deployer
-  describe "Deployer" do
+  describe "FunctionDeployer" do
     let(:pusher) { mock() }
     let(:builder) { mock() }
     let(:updater) { mock() }
@@ -25,7 +25,7 @@ module ServerlessTools::Deployer
 
     describe "#deploy" do
       it "calls each member of the deployer class to deploy the function" do
-        deployer = Deployer.new(config, pusher: pusher, updater: updater, builder: builder)
+        deployer = FunctionDeployer.new(config, pusher: pusher, updater: updater, builder: builder)
 
         builder.expects(:build)
         builder.expects(:output).returns({ local_filename: key })
@@ -41,7 +41,7 @@ module ServerlessTools::Deployer
 
     describe "#build" do
       it "calls the build method of the builder with the config" do
-        deployer = Deployer.new(config, pusher: pusher, updater: updater, builder: builder)
+        deployer = FunctionDeployer.new(config, pusher: pusher, updater: updater, builder: builder)
         builder.expects(:build)
         deployer.build
       end
@@ -49,7 +49,7 @@ module ServerlessTools::Deployer
 
     describe "#push" do
       it "calls the push method of the pusher with the config" do
-        deployer = Deployer.new(config, pusher: pusher, updater: updater, builder: builder)
+        deployer = FunctionDeployer.new(config, pusher: pusher, updater: updater, builder: builder)
 
         builder.expects(:output).returns({ local_filename: key })
         pusher.expects(:push).with(local_filename: key)
@@ -60,7 +60,7 @@ module ServerlessTools::Deployer
 
     describe "#update" do
       it "calls the update method of the updater with the config" do
-        deployer = Deployer.new(config, pusher: pusher, updater: updater, builder: builder)
+        deployer = FunctionDeployer.new(config, pusher: pusher, updater: updater, builder: builder)
 
         pusher.expects(:output).returns({ s3_key: key, s3_bucket: bucket })
 
@@ -80,9 +80,9 @@ module ServerlessTools::Deployer
       end
 
       it "returns a deployer with a pusher, updater, and builder" do
-        result = Deployer.create_for_function(config: config)
+        result = FunctionDeployer.create_for_function(config: config)
 
-        assert_equal(result.class.name, "ServerlessTools::Deployer::Deployer")
+        assert_equal(result.class.name, "ServerlessTools::Deployer::FunctionDeployer")
         assert_equal(result.pusher.class.name, "ServerlessTools::Deployer::S3Pusher")
         assert_equal(result.updater.class.name, "ServerlessTools::Deployer::LambdaUpdater")
         assert_equal(result.builder.class.name, "ServerlessTools::Deployer::RubyBuilder")
@@ -95,7 +95,7 @@ module ServerlessTools::Deployer
 
         it "raises a RuntimeNotSupported error" do
           assert_raises(RuntimeNotSupported) do
-            Deployer.create_for_function(config: config)
+            FunctionDeployer.create_for_function(config: config)
           end
         end
       end
