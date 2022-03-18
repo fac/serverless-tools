@@ -37,19 +37,17 @@ module ServerlessTools::Deployer
 
         it "uploads the file and returns the uploaded configuration" do
           result = subject.push(config: config)
-          expected = {
-            s3_bucket: "test",
-            s3_key: "/deployments/1234567890/filename/function.zip"
-          }
           assert_equal(result, expected)
         end
       end
 
       describe "when an object does exist" do
-        it "does not upload a file to S3 and returns the configuration" do
+        before do
           Aws::S3::Object.any_instance.stubs(:exists?).returns(true)
           Aws::S3::Object.any_instance.expects(:upload_file).never
+        end
 
+        it "does not upload a file to S3 and returns the configuration" do
           result = subject.push(config: config)
           assert_equal(result, expected)
         end
