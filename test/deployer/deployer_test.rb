@@ -33,7 +33,7 @@ module ServerlessTools::Deployer
       end
     end
 
-    describe "#builder" do
+    describe "#build" do
       it "calls the build method of the builder with the config" do
         deployer = Deployer.new(config, pusher: pusher, updater: updater, builder: builder)
         builder.expects(:build).with(config: config)
