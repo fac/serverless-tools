@@ -3,7 +3,6 @@
 module ServerlessTools
   module Deployer
     class RubyBuilder
-      attr_reader :config
       def initialize(config:)
         @config = config
       end
@@ -22,6 +21,10 @@ module ServerlessTools
       def local_filename
         "#{config.name}.zip"
       end
+
+      private
+
+      attr_reader :config
     end
   end
 end
