@@ -1,6 +1,7 @@
 require "thor"
 require_relative "./comment"
 require_relative "./deployer"
+require_relative "./version"
 
 module ServerlessTools
   class CLI < Thor
@@ -15,6 +16,11 @@ module ServerlessTools
     method_option :filename, :type => :string, :aliases => "-f"
     def deploy(action, function=nil)
       Deployer.deploy(action: action, function: function, filename: options[:filename])
+    end
+
+    desc "version", "prints the version of the library"
+    def version
+      puts VERSION
     end
   end
 end
