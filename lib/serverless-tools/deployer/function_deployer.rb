@@ -12,6 +12,7 @@ require_relative "./ruby_builder"
 require_relative "./docker_builder"
 require_relative "./python_builder"
 require_relative "./errors"
+require_relative "./overrides"
 
 module ServerlessTools
   module Deployer
@@ -42,16 +43,16 @@ module ServerlessTools
         update
       end
 
-      def self.create_for_function(config:)
-        send("#{config.runtime}_deployer", config)
+      def self.create_for_function(config:, overrides: Overrides.new)
+        send("#{config.runtime}_deployer", config, overrides)
       rescue NoMethodError
         raise RuntimeNotSupported.new(config: config)
       end
 
-      def self.ruby_deployer(config)
+      def self.ruby_deployer(config, overrides)
         self.new(
           builder: RubyBuilder.new(config: config),
-          pusher: S3Pusher.new(client: Aws::S3::Client.new, git: Git.new, config: config),
+          pusher: S3Pusher.new(client: Aws::S3::Client.new, git: Git.new, config: config, overrides: overrides),
           updater: LambdaUpdater.new(client: Aws::Lambda::Client.new, config: config)
         )
       end

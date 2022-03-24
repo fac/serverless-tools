@@ -11,7 +11,6 @@ module ServerlessTools::Deployer
     let(:git) { mock }
     let(:local_filename) { "filename.zip" }
     let(:object) { mock }
-    let(:subject) { S3Pusher.new(client: s3, git: git, config: config) }
     let(:config) do
       FunctionConfig.new(name: "filename", bucket: "test", s3_archive_name: "function.zip")
     end
@@ -21,6 +20,8 @@ module ServerlessTools::Deployer
         s3_key: "/deployments/1234567890/filename/function.zip"
       }
     end
+
+    subject { S3Pusher.new(client: s3, git: git, config: config) }
 
     before do
       git.stubs(:sha).returns("1234567890")
@@ -60,6 +61,20 @@ module ServerlessTools::Deployer
         it "does not upload a file to S3 and returns the configuration" do
           result = subject.push(local_filename: local_filename)
           assert_equal(result, expected)
+        end
+
+        describe "when the force options in the overrides is true" do
+          subject { S3Pusher.new(client: s3, git: git, config: config, overrides: Overrides.new(force: true)) }
+
+          before do
+            Aws::S3::Object.any_instance.expects(:exists?).returns(true)
+            Aws::S3::Object.any_instance.expects(:upload_file).with("filename.zip")
+          end
+
+          it "uploads the file and returns the uploaded configuration" do
+            result = subject.push(local_filename: local_filename)
+            assert_equal(result, expected)
+          end
         end
       end
 

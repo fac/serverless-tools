@@ -1,18 +1,20 @@
 # frozen_string_literal: true
 
 require "aws-sdk-s3"
+require_relative "./overrides"
 
 module ServerlessTools
   module Deployer
     class S3Pusher
-      def initialize(client:, git:, config:)
+      def initialize(client:, git:, config:, overrides: Overrides.new)
         @client = client
         @git = git
         @config = config
+        @overrides = overrides
       end
 
       def push(local_filename:)
-        if object.exists?
+        unless overrides.force? || !object.exists?
           puts "Did not upload #{object.key} as it already exists!"
         else
           object.upload_file(local_filename)
@@ -42,7 +44,7 @@ module ServerlessTools
         "#{config.repo}/deployments/#{git.sha}/#{config.name}/#{config.s3_archive_name}"
       end
 
-      attr_reader :client, :git, :config
+      attr_reader :client, :git, :config, :overrides
     end
   end
 end
