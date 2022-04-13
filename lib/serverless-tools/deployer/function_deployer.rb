@@ -1,12 +1,15 @@
 # fronzen_string_literal: true
 
 require "aws-sdk-s3"
+require "aws-sdk-ecr"
 require "aws-sdk-lambda"
 
 require_relative "../git"
 require_relative "./s3_pusher"
+require_relative "./ecr_pusher"
 require_relative "./lambda_updater"
 require_relative "./ruby_builder"
+require_relative "./r_builder"
 require_relative "./errors"
 
 module ServerlessTools
@@ -48,6 +51,14 @@ module ServerlessTools
         self.new(
           builder: RubyBuilder.new(config: config),
           pusher: S3Pusher.new(client: Aws::S3::Client.new, git: Git.new, config: config),
+          updater: LambdaUpdater.new(client: Aws::Lambda::Client.new, config: config)
+        )
+      end
+
+      def self.r_deployer(config)
+        self.new(
+          builder: RBuilder.new(config: config),
+          pusher: EcrPusher.new(client: Aws::ECR::Client.new, git: Git.new, config: config),
           updater: LambdaUpdater.new(client: Aws::Lambda::Client.new, config: config)
         )
       end

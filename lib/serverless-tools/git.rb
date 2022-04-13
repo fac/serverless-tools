@@ -4,5 +4,9 @@ module ServerlessTools
     def sha
       (`git rev-parse HEAD`).strip
     end
+
+    def short_sha
+      (`git rev-parse --short HEAD`).strip
+    end
   end
 end

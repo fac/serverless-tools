@@ -1,7 +1,8 @@
 PATH
   remote: .
   specs:
-    serverless-tools (0.2.0)
+    serverless-tools (0.3.0)
+      aws-sdk-ecr
       aws-sdk-lambda
       aws-sdk-s3
       thor
@@ -11,25 +12,28 @@ GEM
   specs:
     ast (2.4.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.557.0)
-    aws-sdk-core (3.126.2)
+    aws-partitions (1.574.0)
+    aws-sdk-core (3.130.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-kms (1.54.0)
-      aws-sdk-core (~> 3, >= 3.126.0)
+    aws-sdk-ecr (1.56.0)
+      aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-lambda (1.78.0)
-      aws-sdk-core (~> 3, >= 3.126.0)
+    aws-sdk-kms (1.53.0)
+      aws-sdk-core (~> 3, >= 3.125.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.112.0)
-      aws-sdk-core (~> 3, >= 3.126.0)
+    aws-sdk-lambda (1.67.0)
+      aws-sdk-core (~> 3, >= 3.119.0)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-s3 (1.111.3)
+      aws-sdk-core (~> 3, >= 3.125.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
     aws-sigv4 (1.4.0)
       aws-eventstream (~> 1, >= 1.0.2)
-    jmespath (1.6.0)
+    jmespath (1.6.1)
     minitest (5.15.0)
     mocha (1.13.0)
     parallel (1.21.0)
@@ -70,4 +74,4 @@ DEPENDENCIES
   test-unit
 
 BUNDLED WITH
-   2.2.31
+   2.2.32

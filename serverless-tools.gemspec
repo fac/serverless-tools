@@ -44,5 +44,6 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency "aws-sdk-lambda"
   spec.add_runtime_dependency "aws-sdk-s3"
+  spec.add_runtime_dependency "aws-sdk-ecr"
   spec.add_runtime_dependency "thor"
 end

@@ -71,24 +71,43 @@ module ServerlessTools::Deployer
     end
 
     describe "#create_for_function" do
-      let(:s3) { Aws::S3::Client.new(stub_responses: true) }
-      let(:lambda_client) { Aws::Lambda::Client.new(stub_responses: true) }
+      describe "for Ruby runtime" do
+        let(:ruby_config) { FunctionConfig.new(handler_file: "handler.rb") }
 
-      before do
-        Aws::S3::Client.stubs(:new).returns(s3)
-        Aws::Lambda::Client.stubs(:new).returns(lambda_client)
+        before do
+          Aws::S3::Client.stubs(:new)
+          Aws::Lambda::Client.stubs(:new)
+        end
+
+        it "returns a deployer with a pusher, updater, and builder" do
+          result = FunctionDeployer.create_for_function(config: ruby_config)
+
+          assert_equal(result.class.name, "ServerlessTools::Deployer::FunctionDeployer")
+          assert_equal(result.pusher.class.name, "ServerlessTools::Deployer::S3Pusher")
+          assert_equal(result.updater.class.name, "ServerlessTools::Deployer::LambdaUpdater")
+          assert_equal(result.builder.class.name, "ServerlessTools::Deployer::RubyBuilder")
+        end
       end
 
-      it "returns a deployer with a pusher, updater, and builder" do
-        result = FunctionDeployer.create_for_function(config: config)
+      describe "for R runtime" do
+        let(:r_config) { FunctionConfig.new(handler_file: "handler.R") }
 
-        assert_equal(result.class.name, "ServerlessTools::Deployer::FunctionDeployer")
-        assert_equal(result.pusher.class.name, "ServerlessTools::Deployer::S3Pusher")
-        assert_equal(result.updater.class.name, "ServerlessTools::Deployer::LambdaUpdater")
-        assert_equal(result.builder.class.name, "ServerlessTools::Deployer::RubyBuilder")
+        before do
+          Aws::ECR::Client.stubs(:new)
+          Aws::Lambda::Client.stubs(:new)
+        end
+
+        it "returns a deployer with a pusher, updater, and builder" do
+          result = FunctionDeployer.create_for_function(config: r_config)
+
+          assert_equal(result.class.name, "ServerlessTools::Deployer::FunctionDeployer")
+          assert_equal(result.pusher.class.name, "ServerlessTools::Deployer::EcrPusher")
+          assert_equal(result.updater.class.name, "ServerlessTools::Deployer::LambdaUpdater")
+          assert_equal(result.builder.class.name, "ServerlessTools::Deployer::RBuilder")
+        end
       end
 
-      describe "when the config can't be infered" do
+      describe "when the config can't be inferred" do
         let(:config) do
           FunctionConfig.new()
         end
