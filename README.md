@@ -25,6 +25,19 @@ See [FreeAgent Application Setup](https://www.notion.so/freeagent/Setting-up-the
 ### Deployer
 
 The deployer tool is used to bundle up the code in this repo and update the corresponding lambda functions.
+It supports both Lambdas with code in an S3 bucket as well as those deployed as a Docker container.
+
+```yaml
+  # Example entry in functions.yml for an S3-based function
+  repo: serverless-tools
+  s3_archive_name: function.zip
+  handler_file: handler_one.rb
+  bucket: freeagent-lambda-example-scripts
+
+  # Example entry in functions.yml for an function in a Docker container
+  repo: serverless-tools
+  dockerfile: lambda-container-context/Dockerfile
+```
 
 ```zsh
   serverless-tools help # Run for all command options
@@ -38,9 +51,9 @@ The deployer takes 2 arguments:
 The deployer uses the current git HEAD for which sha to push and update.
 
 ```zsh
-  serverless-tools deploy build # Zips the file - assumes bundle install has been run and deps are in a vendor folder
-  serverless-tools deploy push # Push the zip(s) to S3
-  serverless-tools deploy update # Update the lambda function
+  serverless-tools deploy build # Zips the file - assumes bundle install has been run and deps are in a vendor folder OR Builds a Docker image
+  serverless-tools deploy push # Pushes the zip(s) to S3 OR Pushes the Docker image to Amazon Elastic Container Registry (ECR)
+  serverless-tools deploy update # Updates the lambda function
 ```
 
 ### Comment
