@@ -2,7 +2,7 @@
 
 module ServerlessTools
   module Deployer
-    class RBuilder
+    class DockerBuilder
       def initialize(config:)
         @config = config
       end

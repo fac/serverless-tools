@@ -89,8 +89,8 @@ module ServerlessTools::Deployer
         end
       end
 
-      describe "for R runtime" do
-        let(:r_config) { FunctionConfig.new(handler_file: "handler.R") }
+      describe "for Docker runtime" do
+        let(:docker_config) { FunctionConfig.new(dockerfile: "Dockerfile") }
 
         before do
           Aws::ECR::Client.stubs(:new)
@@ -98,12 +98,12 @@ module ServerlessTools::Deployer
         end
 
         it "returns a deployer with a pusher, updater, and builder" do
-          result = FunctionDeployer.create_for_function(config: r_config)
+          result = FunctionDeployer.create_for_function(config: docker_config)
 
           assert_equal(result.class.name, "ServerlessTools::Deployer::FunctionDeployer")
           assert_equal(result.pusher.class.name, "ServerlessTools::Deployer::EcrPusher")
           assert_equal(result.updater.class.name, "ServerlessTools::Deployer::LambdaUpdater")
-          assert_equal(result.builder.class.name, "ServerlessTools::Deployer::RBuilder")
+          assert_equal(result.builder.class.name, "ServerlessTools::Deployer::DockerBuilder")
         end
       end
 

@@ -42,7 +42,7 @@ module ServerlessTools
       describe "#runtime" do
         it "infers a runtime based on the config" do
           assert_equal(s3_archive_function_config.runtime, "ruby")
-          assert_equal(containerised_function_config.runtime, "r")
+          assert_equal(containerised_function_config.runtime, "docker")
         end
       end
     end

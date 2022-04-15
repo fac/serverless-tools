@@ -12,13 +12,10 @@ module ServerlessTools
       keyword_init: true
     ) do
       def runtime
+        return "docker" unless dockerfile.nil?
+
         unless handler_file.nil?
-          case file_extension(handler_file)
-          when "rb"
-            "ruby"
-          when "R"
-            "r"
-          end
+          return "ruby" if file_extension(handler_file) == "rb"
         end
       end
 

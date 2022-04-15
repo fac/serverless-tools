@@ -37,7 +37,6 @@ It supports both Lambdas with code in an S3 bucket as well as those deployed as 
   # Example entry in functions.yml for an function in a Docker container
   repo: serverless-tools
   dockerfile: lambda-container-context/Dockerfile
-  handler_file: handler.R
 ```
 
 ```zsh

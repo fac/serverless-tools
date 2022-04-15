@@ -1,14 +1,14 @@
 require "minitest/autorun"
 require "mocha/minitest"
 
-require "serverless-tools/deployer/r_builder"
+require "serverless-tools/deployer/docker_builder"
 
 module ServerlessTools::Deployer
-  describe "RBuilder" do
+  describe "DockerBuilder" do
     let(:config) {
         FunctionConfig.new(name: "function_one", repo: "function_one_ecr_repo", dockerfile: "Dockerfile")
     }
-    let(:subject) { RBuilder.new(config: config) }
+    let(:subject) { DockerBuilder.new(config: config) }
 
     describe "#build" do
       it "builds the Docker image" do
