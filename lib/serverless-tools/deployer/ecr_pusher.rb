@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require "aws-sdk-ecr"
 
 module ServerlessTools
   module Deployer
