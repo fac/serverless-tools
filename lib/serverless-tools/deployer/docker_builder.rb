@@ -8,7 +8,8 @@ module ServerlessTools
       end
 
       def build
-        system("docker build . -f #{config.dockerfile} -t #{local_image_name}")
+        puts "Building Docker image"
+        `docker build . -f #{config.dockerfile} -t #{local_image_name}`
       end
 
       def output
