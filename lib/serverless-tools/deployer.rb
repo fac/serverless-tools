@@ -2,14 +2,12 @@ require "yaml"
 
 require_relative "./deployer/function_deployer"
 require_relative "./deployer/yaml_config_loader"
-require_relative "./deployer/options"
 
 module ServerlessTools
   module Deployer
-    def self.deploy(action:, function: nil, options: { filename: "functions.yml", force: false })
+    def self.deploy(action:, options:, function: nil)
       raise "Expected to receive action but action was empty" if action.nil? || action.empty?
 
-      options = Options.new(**options)
       config_loader = YamlConfigLoader.new(filename: options.filename)
 
       lambdas_to_deploy = function ? [function] : config_loader.functions

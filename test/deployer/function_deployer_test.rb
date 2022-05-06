@@ -122,7 +122,7 @@ module ServerlessTools::Deployer
         end
 
         it "returns a deployer with a pusher, updater, and builder" do
-          result = FunctionDeployer.create_for_function(config: ruby_config)
+          result = FunctionDeployer.create_for_function(config: ruby_config, options: options)
 
           assert_equal(result.class.name, "ServerlessTools::Deployer::FunctionDeployer")
           assert_equal(result.pusher.class.name, "ServerlessTools::Deployer::S3Pusher")
@@ -140,7 +140,7 @@ module ServerlessTools::Deployer
         end
 
         it "returns a deployer with a pusher, updater, and builder" do
-          result = FunctionDeployer.create_for_function(config: docker_config)
+          result = FunctionDeployer.create_for_function(config: docker_config, options: options)
 
           assert_equal(result.class.name, "ServerlessTools::Deployer::FunctionDeployer")
           assert_equal(result.pusher.class.name, "ServerlessTools::Deployer::EcrPusher")
@@ -156,7 +156,7 @@ module ServerlessTools::Deployer
 
         it "raises a RuntimeNotSupported error" do
           assert_raises(RuntimeNotSupported) do
-            FunctionDeployer.create_for_function(config: config)
+            FunctionDeployer.create_for_function(config: config, options: options)
           end
         end
       end

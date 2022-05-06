@@ -26,36 +26,7 @@ module ServerlessTools
       end
 
       it "sends the action to the created deployer" do
-        Deployer.deploy(action: "build", function: function)
-      end
-
-      describe "when specifying a force" do
-        let(:options) { Deployer::Options.new(force: true, filename: filename) }
-
-        before do
-          Deployer::Options.stubs(:new)
-            .with(force: true, filename: filename)
-            .returns(options)
-        end
-
-        it "creates the correct options" do
-          Deployer.deploy(action: "build", function: function, options: { force: true, filename: filename })
-        end
-      end
-
-      describe "when specifying a different config file" do
-        let(:filename) { "dev.functions.yml" }
-        let(:options) { Deployer::Options.new(filename: filename) }
-
-        before do
-          Deployer::Options.stubs(:new)
-            .with(filename: filename)
-            .returns(options)
-        end
-
-        it "loads the correct file" do
-          Deployer.deploy(action: "build", function: function, options: { filename: filename })
-        end
+        Deployer.deploy(action: "build", function: function, options: options)
       end
     end
   end

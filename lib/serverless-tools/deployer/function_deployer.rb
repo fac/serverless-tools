@@ -12,7 +12,6 @@ require_relative "./ruby_builder"
 require_relative "./docker_builder"
 require_relative "./python_builder"
 require_relative "./errors"
-require_relative "./options"
 
 module ServerlessTools
   module Deployer
@@ -56,7 +55,7 @@ module ServerlessTools
         pusher.output.empty?
       end
 
-      def self.create_for_function(config:, options: Options.new)
+      def self.create_for_function(config:, options:)
         send("#{config.runtime}_deployer", config, options)
       rescue NoMethodError
         raise RuntimeNotSupported.new(config: config)
