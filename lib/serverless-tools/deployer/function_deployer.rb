@@ -12,18 +12,18 @@ require_relative "./ruby_builder"
 require_relative "./docker_builder"
 require_relative "./python_builder"
 require_relative "./errors"
-require_relative "./overrides"
+require_relative "./options"
 
 module ServerlessTools
   module Deployer
     class FunctionDeployer
-      attr_reader :builder, :pusher, :updater, :overrides
+      attr_reader :builder, :pusher, :updater, :options
 
-      def initialize(builder:, pusher:, updater:, overrides:)
+      def initialize(builder:, pusher:, updater:, options:)
         @builder = builder
         @pusher = pusher
         @updater = updater
-        @overrides = overrides
+        @options = options
       end
 
       def build
@@ -47,31 +47,31 @@ module ServerlessTools
       private
 
       def pusher_should_push?
-        return true if overrides.force?
+        return true if options.force?
         pusher.output.empty?
       end
 
-      def self.create_for_function(config:, overrides: Overrides.new)
-        send("#{config.runtime}_deployer", config, overrides)
+      def self.create_for_function(config:, options: Options.new)
+        send("#{config.runtime}_deployer", config, options)
       rescue NoMethodError
         raise RuntimeNotSupported.new(config: config)
       end
 
-      def self.ruby_deployer(config, overrides)
+      def self.ruby_deployer(config, options)
         self.new(
           builder: RubyBuilder.new(config: config),
           pusher: S3Pusher.new(client: Aws::S3::Client.new, git: Git.new, config: config),
           updater: LambdaUpdater.new(client: Aws::Lambda::Client.new, config: config),
-          overrides: overrides,
+          options: options,
         )
       end
 
-      def self.docker_deployer(config, overrides)
+      def self.docker_deployer(config, options)
         self.new(
           builder: DockerBuilder.new(config: config),
           pusher: EcrPusher.new(client: Aws::ECR::Client.new, git: Git.new, config: config),
           updater: LambdaUpdater.new(client: Aws::Lambda::Client.new, config: config),
-          overrides: overrides,
+          options: options,
         )
       end
 

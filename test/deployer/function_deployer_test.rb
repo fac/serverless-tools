@@ -3,7 +3,7 @@ require "mocha/minitest"
 
 require "serverless-tools/deployer/function_deployer"
 require "serverless-tools/deployer/function_config"
-require "serverless-tools/deployer/overrides"
+require "serverless-tools/deployer/options"
 require "serverless-tools/deployer/errors"
 
 module ServerlessTools::Deployer
@@ -24,10 +24,10 @@ module ServerlessTools::Deployer
       )
     end
 
-    let(:overrides) { Overrides.new }
+    let(:options) { Options.new }
 
     subject do
-      FunctionDeployer.new(pusher: pusher, updater: updater, builder: builder, overrides: overrides)
+      FunctionDeployer.new(pusher: pusher, updater: updater, builder: builder, options: options)
     end
 
     describe "#deploy" do
@@ -74,7 +74,7 @@ module ServerlessTools::Deployer
       end
 
       describe "when the force option is present" do
-        let(:overrides) { Overrides.new(force: true) }
+        let(:options) { Options.new(force: true) }
         it "will call push" do
           builder.expects(:output).returns({ local_filename: key })
           pusher.expects(:push).with(local_filename: key)

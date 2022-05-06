@@ -9,7 +9,7 @@ module ServerlessTools
     let(:config) { mock() }
     let(:lambda_config) { mock() }
 
-    let(:overrides) { Deployer::Overrides.new(filename: "functions.yml", force: false) }
+    let(:options) { Deployer::Options.new(filename: "functions.yml", force: false) }
 
     let(:function) { "example_function_one_v1" }
     let(:filename) { "functions.yml" }
@@ -18,8 +18,8 @@ module ServerlessTools
     describe "#deployer" do
       before do
         Deployer::YamlConfigLoader.stubs(:new).with(filename: filename).returns(config)
-        Deployer::FunctionDeployer.stubs(:create_for_function).with(config: lambda_config, 
-overrides: overrides).returns(deployer)
+        Deployer::FunctionDeployer.stubs(:create_for_function).with(config: lambda_config,
+          options: options).returns(deployer)
 
         config.expects(:lambda_config).with(function_name: function).returns(lambda_config)
         deployer.expects(:build)
@@ -30,27 +30,27 @@ overrides: overrides).returns(deployer)
       end
 
       describe "when specifying a force" do
-        let(:overrides) { Deployer::Overrides.new(force: true, filename: filename) }
+        let(:options) { Deployer::Options.new(force: true, filename: filename) }
 
         before do
-          Deployer::Overrides.stubs(:new)
+          Deployer::Options.stubs(:new)
             .with(force: true, filename: filename)
-            .returns(overrides)
+            .returns(options)
         end
 
-        it "creates the correct overrides" do
+        it "creates the correct options" do
           Deployer.deploy(action: "build", function: function, options: { force: true, filename: filename })
         end
       end
 
       describe "when specifying a different config file" do
         let(:filename) { "dev.functions.yml" }
-        let(:overrides) { Deployer::Overrides.new(filename: filename) }
+        let(:options) { Deployer::Options.new(filename: filename) }
 
         before do
-          Deployer::Overrides.stubs(:new)
+          Deployer::Options.stubs(:new)
             .with(filename: filename)
-            .returns(overrides)
+            .returns(options)
         end
 
         it "loads the correct file" do

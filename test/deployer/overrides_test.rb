@@ -1,12 +1,12 @@
 require "minitest/autorun"
 require "mocha/minitest"
-require "serverless-tools/deployer/overrides"
+require "serverless-tools/deployer/options"
 
 module ServerlessTools
   module Deployer
-    describe "Overrides" do
+    describe "Options" do
       describe "by default" do
-        subject { Overrides.new() }
+        subject { Options.new() }
 
         it "force? equals false" do
           assert_equal(subject.force?, false)
@@ -14,7 +14,7 @@ module ServerlessTools
       end
 
       describe "when provided with a truthy force option" do
-        subject { Overrides.new(force: true) }
+        subject { Options.new(force: true) }
 
         it "force? equals true" do
           assert_equal(subject.force?, true)
@@ -22,7 +22,7 @@ module ServerlessTools
       end
 
       describe "when provided with a falsey force option" do
-        subject { Overrides.new(force: false) }
+        subject { Options.new(force: false) }
 
         it "force? equals false" do
           assert_equal(subject.force?, false)

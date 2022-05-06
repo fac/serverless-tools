@@ -2,7 +2,7 @@
 
 module ServerlessTools
   module Deployer
-    Overrides = Struct.new(:force, :filename, keyword_init: true) do
+    Options = Struct.new(:force, :filename, keyword_init: true) do
       def force?
         !!force
       end
