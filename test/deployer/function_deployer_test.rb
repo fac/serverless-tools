@@ -27,7 +27,17 @@ module ServerlessTools::Deployer
     let(:options) { Options.new }
 
     subject do
-      FunctionDeployer.new(pusher: pusher, updater: updater, builder: builder, options: options)
+      FunctionDeployer.new(
+        pusher: pusher,
+        updater: updater,
+        builder: builder,
+        options: options,
+        config: config,
+      )
+    end
+
+    before do
+      subject.stubs(:puts)
     end
 
     describe "#deploy" do
@@ -63,11 +73,19 @@ module ServerlessTools::Deployer
       end
 
       describe "when the pusher has already pushed the asset" do
-        it "does not call push" do
+        before do
           pusher.expects(:output).returns({ s3_bucket: "test", s3_key: "test" })
+        end
 
+        it "does not call push" do
           builder.expects(:output).times(0)
           pusher.expects(:push).times(0)
+
+          subject.push
+        end
+
+        it "logs to let the user know the assets have not been pushed" do
+          subject.expects(:puts).with("Assets for example_function_one_v1 have not been updated")
 
           subject.push
         end

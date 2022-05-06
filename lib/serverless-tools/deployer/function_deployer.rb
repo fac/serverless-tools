@@ -17,13 +17,14 @@ require_relative "./options"
 module ServerlessTools
   module Deployer
     class FunctionDeployer
-      attr_reader :builder, :pusher, :updater, :options
+      attr_reader :builder, :pusher, :updater, :options, :config
 
-      def initialize(builder:, pusher:, updater:, options:)
+      def initialize(builder:, pusher:, updater:, options:, config:)
         @builder = builder
         @pusher = pusher
         @updater = updater
         @options = options
+        @config = config
       end
 
       def build
@@ -31,7 +32,11 @@ module ServerlessTools
       end
 
       def push
-        pusher.push(**builder.output) if pusher_should_push?
+        unless pusher_should_push?
+          puts("Assets for #{config.name} have not been updated")
+          return
+        end
+        pusher.push(**builder.output)
       end
 
       def update
@@ -63,6 +68,7 @@ module ServerlessTools
           pusher: S3Pusher.new(client: Aws::S3::Client.new, git: Git.new, config: config),
           updater: LambdaUpdater.new(client: Aws::Lambda::Client.new, config: config),
           options: options,
+          config: config,
         )
       end
 
@@ -72,6 +78,7 @@ module ServerlessTools
           pusher: EcrPusher.new(client: Aws::ECR::Client.new, git: Git.new, config: config),
           updater: LambdaUpdater.new(client: Aws::Lambda::Client.new, config: config),
           options: options,
+          config: config,
         )
       end
 
