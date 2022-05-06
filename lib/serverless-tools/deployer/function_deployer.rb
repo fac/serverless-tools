@@ -17,12 +17,13 @@ require_relative "./overrides"
 module ServerlessTools
   module Deployer
     class FunctionDeployer
-      attr_reader :builder, :pusher, :updater
+      attr_reader :builder, :pusher, :updater, :overrides
 
-      def initialize(builder:, pusher:, updater:)
+      def initialize(builder:, pusher:, updater:, overrides:)
         @builder = builder
         @pusher = pusher
         @updater = updater
+        @overrides = overrides
       end
 
       def build
@@ -30,7 +31,7 @@ module ServerlessTools
       end
 
       def push
-        pusher.push(**builder.output)
+        pusher.push(**builder.output) if pusher_should_push?
       end
 
       def update
@@ -43,6 +44,13 @@ module ServerlessTools
         update
       end
 
+      private
+
+      def pusher_should_push?
+        return true if overrides.force?
+        pusher.output.empty?
+      end
+
       def self.create_for_function(config:, overrides: Overrides.new)
         send("#{config.runtime}_deployer", config, overrides)
       rescue NoMethodError
@@ -52,16 +60,18 @@ module ServerlessTools
       def self.ruby_deployer(config, overrides)
         self.new(
           builder: RubyBuilder.new(config: config),
-          pusher: S3Pusher.new(client: Aws::S3::Client.new, git: Git.new, config: config, overrides: overrides),
-          updater: LambdaUpdater.new(client: Aws::Lambda::Client.new, config: config)
+          pusher: S3Pusher.new(client: Aws::S3::Client.new, git: Git.new, config: config),
+          updater: LambdaUpdater.new(client: Aws::Lambda::Client.new, config: config),
+          overrides: overrides,
         )
       end
 
-      def self.docker_deployer(config)
+      def self.docker_deployer(config, overrides)
         self.new(
           builder: DockerBuilder.new(config: config),
           pusher: EcrPusher.new(client: Aws::ECR::Client.new, git: Git.new, config: config),
-          updater: LambdaUpdater.new(client: Aws::Lambda::Client.new, config: config)
+          updater: LambdaUpdater.new(client: Aws::Lambda::Client.new, config: config),
+          overrides: overrides,
         )
       end
 

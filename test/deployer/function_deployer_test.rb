@@ -3,13 +3,14 @@ require "mocha/minitest"
 
 require "serverless-tools/deployer/function_deployer"
 require "serverless-tools/deployer/function_config"
+require "serverless-tools/deployer/overrides"
 require "serverless-tools/deployer/errors"
 
 module ServerlessTools::Deployer
   describe "FunctionDeployer" do
-    let(:pusher) { mock() }
-    let(:builder) { mock() }
-    let(:updater) { mock() }
+    let(:pusher) { mock("pusher") }
+    let(:builder) { mock("builder") }
+    let(:updater) { mock("updater") }
     let(:bucket) { "freeagent-lambda-example-scripts" }
     let(:key) { "function.zip" }
 
@@ -23,50 +24,73 @@ module ServerlessTools::Deployer
       )
     end
 
+    let(:overrides) { Overrides.new }
+
+    subject do
+      FunctionDeployer.new(pusher: pusher, updater: updater, builder: builder, overrides: overrides)
+    end
+
     describe "#deploy" do
       it "calls each member of the deployer class to deploy the function" do
-        deployer = FunctionDeployer.new(pusher: pusher, updater: updater, builder: builder)
-
         builder.expects(:build)
         builder.expects(:output).returns({ local_filename: key })
 
-        pusher.expects(:push).with(local_filename: key)
         pusher.expects(:output).returns({ s3_key: key, s3_bucket: bucket })
+        pusher.expects(:output).returns({})
+        pusher.expects(:push).with(local_filename: key)
 
         updater.expects(:update).with(s3_key: key, s3_bucket: bucket)
 
-        deployer.deploy
+        subject.deploy
       end
     end
 
     describe "#build" do
       it "calls the build method of the builder with the config" do
-        deployer = FunctionDeployer.new(pusher: pusher, updater: updater, builder: builder)
         builder.expects(:build)
-        deployer.build
+        subject.build
       end
     end
 
     describe "#push" do
       it "calls the push method of the pusher with the config" do
-        deployer = FunctionDeployer.new(pusher: pusher, updater: updater, builder: builder)
-
         builder.expects(:output).returns({ local_filename: key })
+        pusher.expects(:output).returns({})
+
         pusher.expects(:push).with(local_filename: key)
 
-        deployer.push
+        subject.push
+      end
+
+      describe "when the pusher has already pushed the asset" do
+        it "does not call push" do
+          pusher.expects(:output).returns({ s3_bucket: "test", s3_key: "test" })
+
+          builder.expects(:output).times(0)
+          pusher.expects(:push).times(0)
+
+          subject.push
+        end
+      end
+
+      describe "when the force option is present" do
+        let(:overrides) { Overrides.new(force: true) }
+        it "will call push" do
+          builder.expects(:output).returns({ local_filename: key })
+          pusher.expects(:push).with(local_filename: key)
+
+          subject.push
+        end
       end
     end
 
     describe "#update" do
       it "calls the update method of the updater with the config" do
-        deployer = FunctionDeployer.new(pusher: pusher, updater: updater, builder: builder)
-
         pusher.expects(:output).returns({ s3_key: key, s3_bucket: bucket })
 
         updater.expects(:update).with(s3_key: key, s3_bucket: bucket)
 
-        deployer.update
+        subject.update
       end
     end
 

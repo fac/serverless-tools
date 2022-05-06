@@ -27,20 +27,20 @@ module ServerlessTools::Deployer
       git.stubs(:sha).returns("1234567890")
     end
 
-    describe "when an object doesn't exist" do
-      describe "#push" do
-        before do
-          Aws::S3::Object.any_instance.stubs(:exists?).returns(false, true)
-          Aws::S3::Object.any_instance.expects(:upload_file).with("filename.zip")
-        end
-
-        it "uploads the file and returns the uploaded configuration" do
-          result = subject.push(local_filename: local_filename)
-          assert_equal(result, expected)
-        end
+    describe "#push" do
+      before do
+        Aws::S3::Object.any_instance.stubs(:exists?).returns(false, true)
+        Aws::S3::Object.any_instance.expects(:upload_file).with("filename.zip")
       end
 
-      describe "#output" do
+      it "uploads the file and returns the uploaded configuration" do
+        result = subject.push(local_filename: local_filename)
+        assert_equal(result, expected)
+      end
+    end
+
+    describe "#output" do
+      describe "when an object does not exist" do
         before do
           Aws::S3::Object.any_instance.stubs(:exists?).returns(false)
         end
@@ -49,36 +49,8 @@ module ServerlessTools::Deployer
           assert_equal(result, {})
         end
       end
-    end
 
-    describe "when an object does exist" do
-      describe "#push" do
-        before do
-          Aws::S3::Object.any_instance.stubs(:exists?).returns(true)
-          Aws::S3::Object.any_instance.expects(:upload_file).never
-        end
-
-        it "does not upload a file to S3 and returns the configuration" do
-          result = subject.push(local_filename: local_filename)
-          assert_equal(result, expected)
-        end
-
-        describe "when the force options in the overrides is true" do
-          subject { S3Pusher.new(client: s3, git: git, config: config, overrides: Overrides.new(force: true)) }
-
-          before do
-            Aws::S3::Object.any_instance.expects(:exists?).returns(true)
-            Aws::S3::Object.any_instance.expects(:upload_file).with("filename.zip")
-          end
-
-          it "uploads the file and returns the uploaded configuration" do
-            result = subject.push(local_filename: local_filename)
-            assert_equal(result, expected)
-          end
-        end
-      end
-
-      describe "#output" do
+      describe "when an object does exist" do
         before do
           Aws::S3::Object.any_instance.stubs(:exists?).returns(true)
         end
