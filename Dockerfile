@@ -1,4 +1,4 @@
-FROM ruby:2.7-slim-buster
+FROM ruby:2.7-slim-bullseye
 
 RUN apt-get update -y
 RUN apt-get install -y git zip
