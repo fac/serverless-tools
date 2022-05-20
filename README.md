@@ -108,3 +108,19 @@ jobs:
         with:
           command: deploy push
 ```
+
+## Image
+
+Serverless-Tools is bundled as a Docker Image to be used as a [Github Action](https://docs.github.com/en/actions/creating-actions/creating-a-docker-container-action).
+
+### Building
+
+To build the image locally, run:
+
+```docker image build -t serverless-tools:latest .```
+
+### Running
+
+To execute the image locally run:
+
+```docker container run serverless-tools:latest version```
