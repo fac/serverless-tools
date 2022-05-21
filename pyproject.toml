@@ -1,0 +1,12 @@
+[tool.poetry]
+name = "serverless-tools"
+version = "0.1.0"
+description = "FreeAgent Serverless Tools"
+authors = ["yasser.bennani@freeagent.com"]
+
+[tool.poetry.dependencies]
+decorator = "4.4.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

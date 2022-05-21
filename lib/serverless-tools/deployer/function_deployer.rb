@@ -10,6 +10,7 @@ require_relative "./ecr_pusher"
 require_relative "./lambda_updater"
 require_relative "./ruby_builder"
 require_relative "./docker_builder"
+require_relative "./python_builder"
 require_relative "./errors"
 
 module ServerlessTools
@@ -59,6 +60,14 @@ module ServerlessTools
         self.new(
           builder: DockerBuilder.new(config: config),
           pusher: EcrPusher.new(client: Aws::ECR::Client.new, git: Git.new, config: config),
+          updater: LambdaUpdater.new(client: Aws::Lambda::Client.new, config: config)
+        )
+      end
+
+      def self.python_deployer(config)
+        self.new(
+          builder: PythonBuilder.new(config: config),
+          pusher: S3Pusher.new(client: Aws::S3::Client.new, git: Git.new, config: config),
           updater: LambdaUpdater.new(client: Aws::Lambda::Client.new, config: config)
         )
       end
