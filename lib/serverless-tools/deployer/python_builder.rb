@@ -15,7 +15,8 @@ module ServerlessTools
         `pip install -r requirements.txt -t ./bundle/`
         # Zipping contents of functions and bundle folders with the
         # handler file in a zip as required by AWS
-        `zip -r "#{local_filename}" #{config.handler_file} functions bundle/`
+        `zip -r "#{local_filename}" #{config.handler_file} src functions`
+        `cd bundle && zip -r "../#{local_filename}" ./*`
       end
 
       def output

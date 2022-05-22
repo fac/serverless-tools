@@ -21,7 +21,9 @@ module ServerlessTools::Deployer
         assert_file_exists?(true)
 
         File.delete(subject.local_filename)
+
         # Delete bundle directory created by Python deployer build method
+        File.delete("requirements.txt")
         FileUtils.remove_dir("./bundle",true)
       end
 
