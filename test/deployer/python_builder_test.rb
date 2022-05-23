@@ -22,9 +22,9 @@ module ServerlessTools::Deployer
 
         File.delete(subject.local_filename)
 
-        # Delete package directory created by Python deployer build method
+        # Delete lambda-package directory created by Python deployer build method
         File.delete("requirements.txt")
-        FileUtils.remove_dir("./package",true)
+        FileUtils.remove_dir("./lambda-package",true)
       end
 
       describe "#local_filename" do
