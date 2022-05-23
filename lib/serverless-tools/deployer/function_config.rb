@@ -19,6 +19,7 @@ module ServerlessTools
             return "ruby"
           elsif file_extension(handler_file) == "py"
             return "python"
+          end
         end
       end
 
