@@ -1,0 +1,14 @@
+# This poetry configuration file is for testing purposes to mock
+# a python project file structure
+[tool.poetry]
+name = "serverless-tools"
+version = "0.4.0"
+description = "FreeAgent Serverless Tools"
+authors = ["yasser.bennani@freeagent.com"]
+
+[tool.poetry.dependencies]
+decorator = "4.4.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

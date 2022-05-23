@@ -15,7 +15,11 @@ module ServerlessTools
         return "docker" unless dockerfile.nil?
 
         unless handler_file.nil?
-          return "ruby" if file_extension(handler_file) == "rb"
+          if file_extension(handler_file) == "rb"
+            return "ruby"
+          elsif file_extension(handler_file) == "py"
+            return "python"
+          end
         end
       end
 
