@@ -2,7 +2,7 @@
 # a python project file structure
 [tool.poetry]
 name = "serverless-tools"
-version = "0.4.1"
+version = "0.4.2"
 description = "FreeAgent Serverless Tools"
 authors = ["yasser.bennani@freeagent.com"]
 
