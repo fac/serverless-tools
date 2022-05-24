@@ -1,4 +1,4 @@
-require 'fileutils'
+require "fileutils"
 # frozen_string_literal: true
 
 module ServerlessTools

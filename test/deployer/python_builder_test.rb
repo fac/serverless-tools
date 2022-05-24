@@ -1,6 +1,6 @@
 require "minitest/autorun"
 require "mocha/minitest"
-require 'fileutils'
+require "fileutils"
 require "serverless-tools/deployer/python_builder"
 
 module ServerlessTools::Deployer
