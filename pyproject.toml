@@ -4,7 +4,8 @@
 name = "serverless-tools"
 version = "0.4.2"
 description = "FreeAgent Serverless Tools"
-authors = ["yasser.bennani@freeagent.com"]
+authors = ["Yasser Bennani <yasser.bennani@freeagent.com>"]
+packages = [{include = 'test_package', from = "test/fixtures/test-python-project/src"}]
 
 [tool.poetry.dependencies]
 decorator = "4.4.2"

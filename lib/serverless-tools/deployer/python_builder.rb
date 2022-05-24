@@ -1,3 +1,4 @@
+require 'fileutils'
 # frozen_string_literal: true
 
 module ServerlessTools
@@ -15,6 +16,8 @@ module ServerlessTools
         # Zipping lambda-package folder with the handler file in a zip as required by AWS
         `zip -jr "#{local_filename}" #{config.handler_file}`
         `cd lambda-package && zip -r "../#{local_filename}" ./*`
+        # Clean up
+        clean
       end
 
       def output
@@ -25,6 +28,12 @@ module ServerlessTools
 
       def local_filename
         "#{config.name}.zip"
+      end
+
+      # Remove build residue artifacts
+      def clean
+        FileUtils.remove_dir("./lambda-package",true)
+        FileUtils.remove_dir("./dist",true)
       end
 
       private

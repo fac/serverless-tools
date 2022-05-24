@@ -1,6 +1,6 @@
 require "minitest/autorun"
 require "mocha/minitest"
-
+require 'fileutils'
 require "serverless-tools/deployer/python_builder"
 
 module ServerlessTools::Deployer
@@ -20,11 +20,8 @@ module ServerlessTools::Deployer
 
         assert_file_exists?(true)
 
+        # Clean up files and directories created by Python deployer build method
         File.delete(subject.local_filename)
-
-        # Delete lambda-package directory created by Python deployer build method
-        File.delete("requirements.txt")
-        FileUtils.remove_dir("./lambda-package",true)
       end
 
       describe "#local_filename" do
