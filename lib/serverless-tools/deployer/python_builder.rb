@@ -12,7 +12,7 @@ module ServerlessTools
         # Poetry does not have an option to install dependencies to a specified target folder.
         `poetry build`
         # Workaround is installing them using pip to specified "lambda-package" target directory
-        `python -m pip install -t lambda-package dist/*.whl`
+        `python3 -m pip install -t lambda-package dist/*.whl`
         # Zipping lambda-package folder with the handler file in a zip as required by AWS
         `zip -jr "#{local_filename}" #{config.handler_file}`
         `cd lambda-package && zip -r "../#{local_filename}" ./*`
