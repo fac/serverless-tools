@@ -1,5 +1,9 @@
 # serverless-tools
-A collection of tools used to ease the use of serverless projects
+A collection of tools used to ease the use of serverless projects.
+
+The main goal of serverless tools is to provide a CLI to help deploy lambda functions. It can be used locally to update lambda functions in a developer account for quick iteration. Or, it can be used through a GitHub action for staging and production environments.
+
+The standardisation of this tooling allows us to be confident in what we're deploying, takes the toil out of setting up serverless projects, and brings parity across the deployment tool chain.
 
 ## Requirements
 
@@ -25,7 +29,7 @@ See [FreeAgent Application Setup](https://www.notion.so/freeagent/Setting-up-the
 ### Deployer
 
 The deployer tool is used to bundle up the code in this repo and update the corresponding lambda functions.
-It supports both Lambdas with code in an S3 bucket as well as those deployed as a Docker container.
+It supports both lambdas with code in an S3 bucket as well as those deployed as a Docker container.
 
 ```yaml
   # Example entry in functions.yml for an S3-based function
@@ -124,3 +128,20 @@ To build the image locally, run:
 To execute the image locally run:
 
 ```docker container run serverless-tools:latest version```
+
+You can run the image to mimic the way it would be ran by a Github Action. For example:
+
+```aws-vault exec your-aws-profile -- docker container run -e AWS_REGION=eu-west-1 -e AWS_ACCESS_KEY_ID=AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=AWS_SECRET_ACCESS_KEY --workdir /github/workspace -v `pwd`:/github/workspace serverless-tools:latest deploy build ```
+
+Breaking down this command, we can see what it does:
+
+`aws-vault exec your-aws-profile -- `. The first part uses aws-vault to assume an IAM role, and then this assumed role will be accessible when executing the next part of the command. To run any of the `deploy` commands, we need access to AWS. AWS Vault works by populating environments for the next part of the command.
+
+`docker container run -e AWS_REGION=eu-west-1 -e AWS_ACCESS_KEY_ID=AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=AWS_SECRET_ACCESS_KEY`. We begin the call to `docker container run` and populate the environment variables of the container from the variables AWS Vault has populated.
+
+``--workdir /github/workspace``. We're now telling the run command that the working directory will be `github/workspace` - this can be any directory, we're just using the same namespace for parity with the Github Action. Essentially the command which is executed will be from within the working directory inside the container.
+
+
+``-v `pwd`:/github/workspace`` We're then specifying a volume to be mounted, and we're mapping the current directory of the users machine to the working directory of the container. This accomplishes two things, firstly it provides the code that needs deploying to serverless-tools, and secondly it allows any assets which are generated to be local to the user and accessible to inspect.
+
+`serverless-tools:latest deploy build` finally, we specify the image to run, and which commands to pass to it.
