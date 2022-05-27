@@ -139,7 +139,7 @@ Breaking down this command, we can see what it does:
 
 `docker container run -e AWS_REGION=eu-west-1 -e AWS_ACCESS_KEY_ID=AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=AWS_SECRET_ACCESS_KEY`. We begin the call to `docker container run` and populate the environment variables of the container from the variables AWS Vault has populated.
 
-``--workdir /github/workspace``. We're now telling the run command that the working directory will be `github/workspace` - this can be any directory, we're just using the same namespace for parity with the Github Action. Essentially the command which is exectued will be from within the working directory inside the container.
+``--workdir /github/workspace``. We're now telling the run command that the working directory will be `github/workspace` - this can be any directory, we're just using the same namespace for parity with the Github Action. Essentially the command which is executed will be from within the working directory inside the container.
 
 
 ``-v `pwd`:/github/workspace`` We're then specifying a volume to be mounted, and we're mapping the current directory of the users machine to the working directory of the container. This accomplishes two things, firstly it provides the code that needs deploying to serverless-tools, and secondly it allows any assets which are generated to be local to the user and accessible to inspect.
