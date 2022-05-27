@@ -23,56 +23,44 @@ module ServerlessTools::Deployer
       ecr.stub_responses(:describe_repositories, { repositories: [{ repository_uri: "#{registry_uri}/#{repo}" }] })
     end
 
-    describe "when the image doesn't exist" do
-      before do
-        ecr.stub_responses(
-          :describe_images,
-          { image_details: [{ image_tags: [] }] },
-          { image_details: [{ image_tags: [short_sha] }] }
+    describe "#push" do
+      it "uploads the image and returns the uploaded configuration" do
+        subject.expects(:system).with(
+          "docker tag #{local_image_name} #{registry_uri}/#{repo}:#{short_sha}"
         )
+        subject.expects(:system).with(
+          "docker push #{registry_uri}/#{repo}:#{short_sha}"
+        )
+
+        result = subject.push(local_image_name: local_image_name)
+
+        assert_equal(result, expected)
       end
+    end
 
-      describe "#push" do
-        it "uploads the image and returns the uploaded configuration" do
-          subject.expects(:system).with(
-            "docker tag #{local_image_name} #{registry_uri}/#{repo}:#{short_sha}"
+    describe "#output" do
+      describe "when the image doesn't exist" do
+        before do
+          ecr.stub_responses(
+            :describe_images,
+            { image_details: [{ image_tags: [] }] },
+            { image_details: [{ image_tags: [short_sha] }] }
           )
-          subject.expects(:system).with(
-            "docker push #{registry_uri}/#{repo}:#{short_sha}"
-          )
-
-          result = subject.push(local_image_name: local_image_name)
-
-          assert_equal(result, expected)
         end
-      end
 
-      describe "#output" do
         it "returns an empty hash" do
           assert_equal(subject.output, {})
         end
       end
-    end
 
-    describe "when an image does exist" do
-      before do
-        ecr.stub_responses(
-          :describe_images,
-          { image_details: [{ image_tags: [short_sha] }] }
-        )
-      end
-
-      describe "#push" do
-        it "does not upload an image to ECR and returns the configuration" do
-          subject.expects(:system).never
-
-          result = subject.push(local_image_name: local_image_name)
-
-          assert_equal(result, expected)
+      describe "when an image does exist" do
+        before do
+          ecr.stub_responses(
+            :describe_images,
+            { image_details: [{ image_tags: [short_sha] }] }
+          )
         end
-      end
 
-      describe "#output" do
         it "returns the existing image URI" do
           assert_equal(subject.output, expected)
         end

@@ -10,23 +10,23 @@ module ServerlessTools
       end
 
       def push(local_image_name:)
-        if image_tags.include?(tag)
-          puts "Did not upload #{tagged_image_uri} as it already exists!"
-        else
-          system("docker tag #{local_image_name} #{tagged_image_uri}")
-          system("docker push #{tagged_image_uri}")
-        end
-        output
+        system("docker tag #{local_image_name} #{tagged_image_uri}")
+        system("docker push #{tagged_image_uri}")
+        asset
       end
 
       def output
         return {} unless image_tags.include?(tag)
+        asset
+      end
+
+      private
+
+      def asset
         {
           image_uri: tagged_image_uri,
         }
       end
-
-      private
 
       def image_tags
         client.describe_images(repository_name: config.repo).image_details.flat_map(&:image_tags)

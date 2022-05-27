@@ -16,12 +16,14 @@ require_relative "./errors"
 module ServerlessTools
   module Deployer
     class FunctionDeployer
-      attr_reader :builder, :pusher, :updater
+      attr_reader :builder, :pusher, :updater, :options, :config
 
-      def initialize(builder:, pusher:, updater:)
+      def initialize(builder:, pusher:, updater:, options:, config:)
         @builder = builder
         @pusher = pusher
         @updater = updater
+        @options = options
+        @config = config
       end
 
       def build
@@ -29,6 +31,10 @@ module ServerlessTools
       end
 
       def push
+        unless pusher_should_push?
+          puts("Assets for #{config.name} have not been updated")
+          return
+        end
         pusher.push(**builder.output)
       end
 
@@ -42,25 +48,36 @@ module ServerlessTools
         update
       end
 
-      def self.create_for_function(config:)
-        send("#{config.runtime}_deployer", config)
+      private
+
+      def pusher_should_push?
+        return true if options.force?
+        pusher.output.empty?
+      end
+
+      def self.create_for_function(config:, options:)
+        send("#{config.runtime}_deployer", config, options)
       rescue NoMethodError
         raise RuntimeNotSupported.new(config: config)
       end
 
-      def self.ruby_deployer(config)
+      def self.ruby_deployer(config, options)
         self.new(
           builder: RubyBuilder.new(config: config),
           pusher: S3Pusher.new(client: Aws::S3::Client.new, git: Git.new, config: config),
-          updater: LambdaUpdater.new(client: Aws::Lambda::Client.new, config: config)
+          updater: LambdaUpdater.new(client: Aws::Lambda::Client.new, config: config),
+          options: options,
+          config: config,
         )
       end
 
-      def self.docker_deployer(config)
+      def self.docker_deployer(config, options)
         self.new(
           builder: DockerBuilder.new(config: config),
           pusher: EcrPusher.new(client: Aws::ECR::Client.new, git: Git.new, config: config),
-          updater: LambdaUpdater.new(client: Aws::Lambda::Client.new, config: config)
+          updater: LambdaUpdater.new(client: Aws::Lambda::Client.new, config: config),
+          options: options,
+          config: config,
         )
       end
 

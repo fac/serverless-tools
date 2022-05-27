@@ -3,13 +3,14 @@ require "mocha/minitest"
 
 require "serverless-tools/deployer/function_deployer"
 require "serverless-tools/deployer/function_config"
+require "serverless-tools/deployer/options"
 require "serverless-tools/deployer/errors"
 
 module ServerlessTools::Deployer
   describe "FunctionDeployer" do
-    let(:pusher) { mock() }
-    let(:builder) { mock() }
-    let(:updater) { mock() }
+    let(:pusher) { mock("pusher") }
+    let(:builder) { mock("builder") }
+    let(:updater) { mock("updater") }
     let(:bucket) { "freeagent-lambda-example-scripts" }
     let(:key) { "function.zip" }
 
@@ -23,50 +24,91 @@ module ServerlessTools::Deployer
       )
     end
 
+    let(:options) { Options.new }
+
+    subject do
+      FunctionDeployer.new(
+        pusher: pusher,
+        updater: updater,
+        builder: builder,
+        options: options,
+        config: config,
+      )
+    end
+
+    before do
+      subject.stubs(:puts)
+    end
+
     describe "#deploy" do
       it "calls each member of the deployer class to deploy the function" do
-        deployer = FunctionDeployer.new(pusher: pusher, updater: updater, builder: builder)
-
         builder.expects(:build)
         builder.expects(:output).returns({ local_filename: key })
 
-        pusher.expects(:push).with(local_filename: key)
         pusher.expects(:output).returns({ s3_key: key, s3_bucket: bucket })
+        pusher.expects(:output).returns({})
+        pusher.expects(:push).with(local_filename: key)
 
         updater.expects(:update).with(s3_key: key, s3_bucket: bucket)
 
-        deployer.deploy
+        subject.deploy
       end
     end
 
     describe "#build" do
       it "calls the build method of the builder with the config" do
-        deployer = FunctionDeployer.new(pusher: pusher, updater: updater, builder: builder)
         builder.expects(:build)
-        deployer.build
+        subject.build
       end
     end
 
     describe "#push" do
       it "calls the push method of the pusher with the config" do
-        deployer = FunctionDeployer.new(pusher: pusher, updater: updater, builder: builder)
-
         builder.expects(:output).returns({ local_filename: key })
+        pusher.expects(:output).returns({})
+
         pusher.expects(:push).with(local_filename: key)
 
-        deployer.push
+        subject.push
+      end
+
+      describe "when the pusher has already pushed the asset" do
+        before do
+          pusher.expects(:output).returns({ s3_bucket: "test", s3_key: "test" })
+        end
+
+        it "does not call push" do
+          builder.expects(:output).times(0)
+          pusher.expects(:push).times(0)
+
+          subject.push
+        end
+
+        it "logs to let the user know the assets have not been pushed" do
+          subject.expects(:puts).with("Assets for example_function_one_v1 have not been updated")
+
+          subject.push
+        end
+      end
+
+      describe "when the force option is present" do
+        let(:options) { Options.new(force: true) }
+        it "will call push" do
+          builder.expects(:output).returns({ local_filename: key })
+          pusher.expects(:push).with(local_filename: key)
+
+          subject.push
+        end
       end
     end
 
     describe "#update" do
       it "calls the update method of the updater with the config" do
-        deployer = FunctionDeployer.new(pusher: pusher, updater: updater, builder: builder)
-
         pusher.expects(:output).returns({ s3_key: key, s3_bucket: bucket })
 
         updater.expects(:update).with(s3_key: key, s3_bucket: bucket)
 
-        deployer.update
+        subject.update
       end
     end
 
@@ -80,7 +122,7 @@ module ServerlessTools::Deployer
         end
 
         it "returns a deployer with a pusher, updater, and builder" do
-          result = FunctionDeployer.create_for_function(config: ruby_config)
+          result = FunctionDeployer.create_for_function(config: ruby_config, options: options)
 
           assert_equal(result.class.name, "ServerlessTools::Deployer::FunctionDeployer")
           assert_equal(result.pusher.class.name, "ServerlessTools::Deployer::S3Pusher")
@@ -98,7 +140,7 @@ module ServerlessTools::Deployer
         end
 
         it "returns a deployer with a pusher, updater, and builder" do
-          result = FunctionDeployer.create_for_function(config: docker_config)
+          result = FunctionDeployer.create_for_function(config: docker_config, options: options)
 
           assert_equal(result.class.name, "ServerlessTools::Deployer::FunctionDeployer")
           assert_equal(result.pusher.class.name, "ServerlessTools::Deployer::EcrPusher")
@@ -114,7 +156,7 @@ module ServerlessTools::Deployer
 
         it "raises a RuntimeNotSupported error" do
           assert_raises(RuntimeNotSupported) do
-            FunctionDeployer.create_for_function(config: config)
+            FunctionDeployer.create_for_function(config: config, options: options)
           end
         end
       end

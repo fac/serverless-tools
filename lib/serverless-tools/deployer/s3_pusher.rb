@@ -12,23 +12,23 @@ module ServerlessTools
       end
 
       def push(local_filename:)
-        if object.exists?
-          puts "Did not upload #{object.key} as it already exists!"
-        else
-          object.upload_file(local_filename)
-        end
-        output
+        object.upload_file(local_filename)
+        asset
       end
 
       def output
         return {} unless object.exists?
+        asset
+      end
+
+      private
+
+      def asset
         {
           s3_bucket: object.bucket.name,
           s3_key: object.key,
         }
       end
-
-      private
 
       def object
         @object ||= Aws::S3::Object.new(

@@ -30,7 +30,7 @@ Gem::Specification.new do |spec|
   spec.executables   = ["serverless-tools"]
   spec.require_paths = ["lib"]
 
-  spec.requirements = ["zip", "git", "docker"]
+  spec.requirements = ["zip", "git", "docker", "python3", "poetry", "bundle"]
 
   spec.post_install_message = "Serverless tools, and beyond!"
 
