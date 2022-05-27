@@ -144,4 +144,4 @@ Breaking down this command, we can see what it does:
 
 ``-v `pwd`:/github/workspace`` We're then specifying a volume to be mounted, and we're mapping the current directory of the users machine to the working directory of the container. This accomplishes two things, firstly it provides the code that needs deploying to serverless-tools, and secondly it allows any assets which are generated to be local to the user and accessible to inspect.
 
-`serverless-tools:latest deploy build` finally, we specifiy the image to run, and which commands to pass to it.
+`serverless-tools:latest deploy build` finally, we specify the image to run, and which commands to pass to it.
