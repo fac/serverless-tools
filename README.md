@@ -1,9 +1,9 @@
 # serverless-tools
 A collection of tools used to ease the use of serverless projects.
 
-The main goal of serverless tools is to provide a CLI to help deploy lambda functions. It can be used locally to update lambda functions in a developer account for quick iterration. Or, it can be used through a GitHub action for staging and production environments.
+The main goal of serverless tools is to provide a CLI to help deploy lambda functions. It can be used locally to update lambda functions in a developer account for quick iteration. Or, it can be used through a GitHub action for staging and production environments.
 
-The standardisation of this tooling allows us to be confident in what we're deploying, takes the toil out of setting up serverless projects, and brings partiy across the deployment tool chain.
+The standardisation of this tooling allows us to be confident in what we're deploying, takes the toil out of setting up serverless projects, and brings parity across the deployment tool chain.
 
 ## Requirements
 
