@@ -150,7 +150,7 @@ module ServerlessTools::Deployer
       end
 
       describe "for Pythonn runtime" do
-        let(:docker_config) { FunctionConfig.new(handler_file: "handler.py") }
+        let(:python_config) { FunctionConfig.new(handler_file: "handler.py") }
 
         before do
           Aws::S3::Client.stubs(:new)
