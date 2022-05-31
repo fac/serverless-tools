@@ -149,6 +149,24 @@ module ServerlessTools::Deployer
         end
       end
 
+      describe "for Pythonn runtime" do
+        let(:python_config) { FunctionConfig.new(handler_file: "handler.py") }
+
+        before do
+          Aws::S3::Client.stubs(:new)
+          Aws::Lambda::Client.stubs(:new)
+        end
+
+        it "returns a deployer with a pusher, updater, and builder" do
+          result = FunctionDeployer.create_for_function(config: python_config, options: options)
+
+          assert_equal(result.class.name, "ServerlessTools::Deployer::FunctionDeployer")
+          assert_equal(result.pusher.class.name, "ServerlessTools::Deployer::S3Pusher")
+          assert_equal(result.updater.class.name, "ServerlessTools::Deployer::LambdaUpdater")
+          assert_equal(result.builder.class.name, "ServerlessTools::Deployer::PythonBuilder")
+        end
+      end
+
       describe "when the config can't be inferred" do
         let(:config) do
           FunctionConfig.new()

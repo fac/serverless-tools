@@ -81,11 +81,13 @@ module ServerlessTools
         )
       end
 
-      def self.python_deployer(config)
+      def self.python_deployer(config, options)
         self.new(
           builder: PythonBuilder.new(config: config),
           pusher: S3Pusher.new(client: Aws::S3::Client.new, git: Git.new, config: config),
-          updater: LambdaUpdater.new(client: Aws::Lambda::Client.new, config: config)
+          updater: LambdaUpdater.new(client: Aws::Lambda::Client.new, config: config),
+          options: options,
+          config: config,
         )
       end
     end

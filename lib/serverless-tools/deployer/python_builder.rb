@@ -1,5 +1,5 @@
-require "fileutils"
 # frozen_string_literal: true
+require "fileutils"
 
 module ServerlessTools
   module Deployer
