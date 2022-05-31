@@ -158,7 +158,7 @@ module ServerlessTools::Deployer
         end
 
         it "returns a deployer with a pusher, updater, and builder" do
-          result = FunctionDeployer.create_for_function(config: docker_config, options: options)
+          result = FunctionDeployer.create_for_function(config: python_config, options: options)
 
           assert_equal(result.class.name, "ServerlessTools::Deployer::FunctionDeployer")
           assert_equal(result.pusher.class.name, "ServerlessTools::Deployer::S3Pusher")
