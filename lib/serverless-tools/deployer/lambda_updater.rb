@@ -13,26 +13,15 @@ module ServerlessTools
 
         response = client.update_function_code(options)
 
-        success = client.wait_until(:function_updated,
+        client.wait_until(:function_updated,
           { function_name: response[:function_name] },
           { max_attempts: 10, delay: 3 }
         )
 
-        log_output(options: options, success: success)
-
-        success
-      rescue Aws::Lambda::Errors::ServiceError, Aws::Waiters::Errors => e
-        puts "::error:: An error occured when updating #{config.name} #{e.message}"
-        log_output(options: options, success: false)
-
-        false
+        options
       end
 
       private
-
-      def log_output(options:, success:)
-        puts "::set-output name=#{options[:function_name]}_status::#{success ? "Successful" : "Failed" }"
-      end
 
       attr_reader :client, :config
     end
