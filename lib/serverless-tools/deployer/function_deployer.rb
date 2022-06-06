@@ -28,21 +28,29 @@ module ServerlessTools
 
       def build
         builder.build
+        puts "    📦 Assets built"
       end
 
       def push
         unless pusher_should_push?
-          puts("Assets for #{config.name} have not been updated")
+          puts("    🛑 Assets have not been updated")
           return
         end
         pusher.push(**builder.output)
+        puts "    ⬆️  Assets pushed"
       end
 
       def update
-        updater.update(pusher.output)
+        success = updater.update(pusher.output)
+        if success
+          puts "    ✅ Sucessfully updated"
+        else
+          puts "    ❌ Failed to update"
+        end
       end
 
       def deploy
+        puts "🚢 Deploying #{config.name}..."
         build
         push
         update
