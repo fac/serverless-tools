@@ -13,6 +13,9 @@ module ServerlessTools::Deployer
     let(:key) { "serverless-tools/deployments/1234567890/#{function_name}/function.zip" }
     let(:bucket) { "freeagent-lambda-example-scripts" }
 
+    let(:wait_response) { true }
+    let(:options) {{ s3_key: key, s3_bucket: bucket }}
+
     let(:config) do
       FunctionConfig.new(
         name: "example_function_one_v1",
@@ -22,23 +25,35 @@ module ServerlessTools::Deployer
       )
     end
 
+    let(:lambda_updater) { LambdaUpdater.new(client: lambda_client, config: config) }
+
+    before do
+      lambda_client
+        .expects(:update_function_code)
+        .with(
+          has_entries(
+            s3_bucket: bucket,
+            s3_key: key
+          )
+        ).returns(
+          Aws::Lambda::Types::FunctionConfiguration.new(
+            function_name: function_name,
+            last_update_status: "InProgress"
+          )
+        )
+
+      lambda_client.expects(:wait_until).with(
+        :function_updated,
+        { function_name: function_name },
+        { max_attempts: 10, delay: 3 }
+      ).returns(wait_response)
+    end
+
     describe "#update_code" do
       it "updates lambda code" do
-        lambda_client
-          .expects(:update_function_code)
-          .with(
-            has_entries(
-              s3_bucket: bucket,
-              s3_key: key
-            )
-          ).returns({ function_name: function_name, last_update_status: "Successful" })
+        response = lambda_updater.update(options)
 
-        lambda_function = LambdaUpdater.new(client: lambda_client, config: config)
-
-        options = { s3_key: key, s3_bucket: bucket }
-        lambda_function.expects(:puts).with("::set-output name=#{function_name}_status::Successful")
-
-        lambda_function.update(options)
+        assert_equal(response, { **options, function_name: function_name } )
       end
     end
   end

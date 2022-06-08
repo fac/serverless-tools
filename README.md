@@ -131,13 +131,15 @@ To execute the image locally run:
 
 You can run the image to mimic the way it would be ran by a Github Action. For example:
 
-```aws-vault exec your-aws-profile -- docker container run -e AWS_REGION=eu-west-1 -e AWS_ACCESS_KEY_ID=AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=AWS_SECRET_ACCESS_KEY --workdir /github/workspace -v `pwd`:/github/workspace serverless-tools:latest deploy build ```
+```aws-vault exec your-aws-profile -- docker container run -e AWS_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_SESSION_TOKEN -e GITHUB_ENV=/home/runner --workdir /github/workspace -v `pwd`:/github/workspace serverless-tools:latest deploy build ```
 
 Breaking down this command, we can see what it does:
 
 `aws-vault exec your-aws-profile -- `. The first part uses aws-vault to assume an IAM role, and then this assumed role will be accessible when executing the next part of the command. To run any of the `deploy` commands, we need access to AWS. AWS Vault works by populating environments for the next part of the command.
 
-`docker container run -e AWS_REGION=eu-west-1 -e AWS_ACCESS_KEY_ID=AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=AWS_SECRET_ACCESS_KEY`. We begin the call to `docker container run` and populate the environment variables of the container from the variables AWS Vault has populated.
+`docker container run -e AWS_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_SESSION_TOKEN`. We begin the call to `docker container run` and populate the environment variables of the container from the variables AWS Vault has populated.
+
+`-e GITHUB_ENV=/home/runner` Set the GITHUB_ENV env var to a 'realistic value'. Ordinarily, This value changes on each run, but indicates that the CLI is running inside a Github Action and is used to format the output accordingly. For more infomation see [here.](https://docs.github.com/en/actions/learn-github-actions/environment-variables)
 
 ``--workdir /github/workspace``. We're now telling the run command that the working directory will be `github/workspace` - this can be any directory, we're just using the same namespace for parity with the Github Action. Essentially the command which is executed will be from within the working directory inside the container.
 

@@ -10,8 +10,6 @@ COPY . .
 
 RUN bundle install
 RUN bundle exec rake install
-RUN echo $(gem env)
-RUN echo $(gem list)
 
 COPY entrypoint.sh /entrypoint.sh
 

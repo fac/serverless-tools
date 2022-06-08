@@ -16,39 +16,58 @@ require_relative "./errors"
 module ServerlessTools
   module Deployer
     class FunctionDeployer
-      attr_reader :builder, :pusher, :updater, :options, :config
+      attr_reader :builder, :pusher, :updater, :options, :config, :running_in_github
 
-      def initialize(builder:, pusher:, updater:, options:, config:)
+      # rubocop:disable  Metrics/ParameterLists
+      def initialize(builder:, pusher:, updater:, options:, config:, in_github: ENV.fetch("GITHUB_ENV", ""))
         @builder = builder
         @pusher = pusher
         @updater = updater
         @options = options
         @config = config
+        @running_in_github = !in_github.empty?
       end
+      # rubocop:enable  Metrics/ParameterLists
 
       def build
         builder.build
+        puts "    📦 Assets built"
       end
 
       def push
         unless pusher_should_push?
-          puts("Assets for #{config.name} have not been updated")
+          puts("    🛑 Assets have not been updated")
           return
         end
         pusher.push(**builder.output)
+        puts "    ⬆️  Assets pushed"
       end
 
       def update
-        updater.update(pusher.output)
+        response = updater.update(pusher.output)
+        puts "    ✅ Sucessfully updated"
+        log_github_output(response) if running_in_github
+      rescue Aws::Lambda::Errors::ServiceError, Aws::Waiters::Errors
+        puts "    ❌ Failed to update"
+        log_github_error if running_in_github
       end
 
       def deploy
+        puts "🚢 Deploying #{config.name}..."
         build
         push
         update
       end
 
       private
+
+      def log_github_output(response)
+        puts "::set-output name=#{response[:function_name]}_status::Success"
+      end
+
+      def log_github_error
+       puts("::set-output name=#{config.name}_status::Failed")
+      end
 
       def pusher_should_push?
         return true if options.force?

@@ -13,10 +13,11 @@ module ServerlessTools::Deployer
     let(:updater) { mock("updater") }
     let(:bucket) { "freeagent-lambda-example-scripts" }
     let(:key) { "function.zip" }
+    let(:function_name) { "example_function_one_v1" }
 
     let(:config) do
       FunctionConfig.new(
-        name: "example_function_one_v1",
+        name: function_name,
         bucket: bucket,
         repo: "serverless-tools",
         s3_archive_name: key,
@@ -25,6 +26,7 @@ module ServerlessTools::Deployer
     end
 
     let(:options) { Options.new }
+    let(:in_github) { "" }
 
     subject do
       FunctionDeployer.new(
@@ -33,6 +35,7 @@ module ServerlessTools::Deployer
         builder: builder,
         options: options,
         config: config,
+        in_github: in_github,
       )
     end
 
@@ -58,6 +61,9 @@ module ServerlessTools::Deployer
     describe "#build" do
       it "calls the build method of the builder with the config" do
         builder.expects(:build)
+
+        subject.expects(:puts).with("    📦 Assets built")
+
         subject.build
       end
     end
@@ -66,6 +72,8 @@ module ServerlessTools::Deployer
       it "calls the push method of the pusher with the config" do
         builder.expects(:output).returns({ local_filename: key })
         pusher.expects(:output).returns({})
+
+        subject.expects(:puts).with("    ⬆️  Assets pushed")
 
         pusher.expects(:push).with(local_filename: key)
 
@@ -85,7 +93,7 @@ module ServerlessTools::Deployer
         end
 
         it "logs to let the user know the assets have not been pushed" do
-          subject.expects(:puts).with("Assets for example_function_one_v1 have not been updated")
+          subject.expects(:puts).with("    🛑 Assets have not been updated")
 
           subject.push
         end
@@ -103,12 +111,59 @@ module ServerlessTools::Deployer
     end
 
     describe "#update" do
-      it "calls the update method of the updater with the config" do
-        pusher.expects(:output).returns({ s3_key: key, s3_bucket: bucket })
+      let(:s3_config) {{ s3_key: key, s3_bucket: bucket }}
+      let(:s3_update_output) {{ **s3_config, function_name: function_name }}
 
-        updater.expects(:update).with(s3_key: key, s3_bucket: bucket)
+      it "calls the update method of the updater with the config" do
+        pusher.expects(:output).returns(s3_config)
+
+        updater.expects(:update).with(s3_key: key, s3_bucket: bucket).returns(s3_update_output)
+
+        subject.expects(:puts).with("    ✅ Sucessfully updated")
 
         subject.update
+      end
+
+      describe "and the deployer is running on Github" do
+        let(:in_github) { "GITHUB_ENV" }
+        it "logs an output for github" do
+          pusher.expects(:output).returns(s3_config)
+
+          updater.expects(:update).with(s3_key: key, s3_bucket: bucket).returns(s3_update_output)
+
+          subject.expects(:puts).with("    ✅ Sucessfully updated")
+          subject.expects(:puts).with("::set-output name=#{function_name}_status::Success")
+
+          subject.update
+        end
+      end
+
+      describe "when the update fails" do
+        it "logs an appropriate failed message" do
+          pusher.expects(:output).returns({ s3_key: key, s3_bucket: bucket })
+
+          updater.expects(:update).with(s3_key: key, 
+s3_bucket: bucket).raises(Aws::Lambda::Errors::ServiceError.new(mock, "Test Error"))
+
+          subject.expects(:puts).with("    ❌ Failed to update")
+
+          subject.update
+        end
+
+        describe("and the deployer is running on Github") do
+          let(:in_github) { "GITHUB_ENV" }
+          it "logs an output error for github" do
+            pusher.expects(:output).returns({ s3_key: key, s3_bucket: bucket })
+
+            updater.expects(:update).with(s3_key: key, 
+s3_bucket: bucket).raises(Aws::Lambda::Errors::ServiceError.new(mock, "Test Error"))
+
+            subject.expects(:puts).with("    ❌ Failed to update")
+            subject.expects(:puts).with("::set-output name=#{function_name}_status::Failed")
+
+            subject.update
+          end
+        end
       end
     end
 
