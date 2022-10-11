@@ -17,13 +17,14 @@ module ServerlessTools
       end
 
       def functions
-        @keys ||= @data.keys
+        @keys ||= @data["functions"].keys
       end
 
       def lambda_config(function_name:)
         FunctionConfig.new(
           name: function_name,
-          **@data.fetch(function_name)
+          **@data.reject{|key, _| key == "functions"},
+          **@data["functions"].fetch(function_name)
         )
 
       rescue KeyError
