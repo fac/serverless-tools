@@ -132,7 +132,7 @@ module ServerlessTools::Deployer
           updater.expects(:update).with(s3_key: key, s3_bucket: bucket).returns(s3_update_output)
 
           subject.expects(:puts).with("    ✅ Sucessfully updated")
-          subject.expects(:puts).with("::set-output name=#{function_name}_status::Success")
+          subject.expects(:puts).with("\"#{function_name}_status=Success\" >> \"$GITHUB_OUTPUT\"")
 
           subject.update
         end
@@ -142,7 +142,7 @@ module ServerlessTools::Deployer
         it "logs an appropriate failed message" do
           pusher.expects(:output).returns({ s3_key: key, s3_bucket: bucket })
 
-          updater.expects(:update).with(s3_key: key, 
+          updater.expects(:update).with(s3_key: key,
 s3_bucket: bucket).raises(Aws::Lambda::Errors::ServiceError.new(mock, "Test Error"))
 
           subject.expects(:puts).with("    ❌ Failed to update")
@@ -155,11 +155,11 @@ s3_bucket: bucket).raises(Aws::Lambda::Errors::ServiceError.new(mock, "Test Erro
           it "logs an output error for github" do
             pusher.expects(:output).returns({ s3_key: key, s3_bucket: bucket })
 
-            updater.expects(:update).with(s3_key: key, 
+            updater.expects(:update).with(s3_key: key,
 s3_bucket: bucket).raises(Aws::Lambda::Errors::ServiceError.new(mock, "Test Error"))
 
             subject.expects(:puts).with("    ❌ Failed to update")
-            subject.expects(:puts).with("::set-output name=#{function_name}_status::Failed")
+            subject.expects(:puts).with("\"#{function_name}_status=Failed\" >> \"$GITHUB_OUTPUT\"")
 
             subject.update
           end
