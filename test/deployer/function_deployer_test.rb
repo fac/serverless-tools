@@ -132,7 +132,7 @@ module ServerlessTools::Deployer
           updater.expects(:update).with(s3_key: key, s3_bucket: bucket).returns(s3_update_output)
 
           subject.expects(:puts).with("    ✅ Sucessfully updated")
-          subject.expects(:puts).with("echo \"#{function_name}_status=Success\" >> \"$GITHUB_OUTPUT\"")
+          subject.expects(:system).with("echo \"#{function_name}_status=Success\" >> \"$GITHUB_OUTPUT\"")
 
           subject.update
         end
@@ -159,7 +159,7 @@ s3_bucket: bucket).raises(Aws::Lambda::Errors::ServiceError.new(mock, "Test Erro
 s3_bucket: bucket).raises(Aws::Lambda::Errors::ServiceError.new(mock, "Test Error"))
 
             subject.expects(:puts).with("    ❌ Failed to update")
-            subject.expects(:puts).with("echo \"#{function_name}_status=Failed\" >> \"$GITHUB_OUTPUT\"")
+            subject.expects(:system).with("echo \"#{function_name}_status=Failed\" >> \"$GITHUB_OUTPUT\"")
 
             subject.update
           end
