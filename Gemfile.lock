@@ -35,7 +35,7 @@ GEM
       aws-eventstream (~> 1, >= 1.0.2)
     jmespath (1.6.1)
     json (2.6.2)
-    minitest (5.15.0)
+    minitest (5.16.3)
     mocha (1.13.0)
     parallel (1.22.1)
     parser (3.1.2.1)
