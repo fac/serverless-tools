@@ -10,7 +10,7 @@ module ServerlessTools
     method_option :functions, :type => :string, :aliases => "-f", :default => "{}"
     def comment
       comment = Comment.new.build(options[:functions])
-      puts "::set-output name=comment::#{comment}"
+      system("echo \"comment=#{comment}\" >> \"$GITHUB_OUTPUT\"")
     end
 
     desc "deploy", "publishes and deploys the specified lambda functions"
