@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    serverless-tools (0.6.0)
+    serverless-tools (0.7.0)
       aws-sdk-ecr
       aws-sdk-lambda
       aws-sdk-s3
@@ -74,4 +74,4 @@ DEPENDENCIES
   test-unit
 
 BUNDLED WITH
-   2.2.32
+   2.2.33
