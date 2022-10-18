@@ -62,11 +62,11 @@ module ServerlessTools
       private
 
       def log_github_output(response)
-        puts("\"#{response[:function_name]}_status=Success\" >> \"$GITHUB_OUTPUT\"")
+        puts("echo \"#{response[:function_name]}_status=Success\" >> \"$GITHUB_OUTPUT\"")
       end
 
       def log_github_error
-       puts("\"#{config.name}_status=Failed\" >> \"$GITHUB_OUTPUT\"")
+       puts("echo \"#{config.name}_status=Failed\" >> \"$GITHUB_OUTPUT\"")
       end
 
       def pusher_should_push?
