@@ -9,6 +9,7 @@ module ServerlessTools
       :bucket,
       :name,
       :dockerfile,
+      :registry_id,
       keyword_init: true
     ) do
       def runtime

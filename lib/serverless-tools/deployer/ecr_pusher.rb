@@ -29,7 +29,7 @@ module ServerlessTools
       end
 
       def image_tags
-        client.describe_images(repository_name: config.repo).image_details.flat_map(&:image_tags)
+        client.describe_images(repository_name: config.repo, registry_id: config.registry_id).image_details.flat_map(&:image_tags)
       end
 
       def tagged_image_uri
@@ -38,7 +38,8 @@ module ServerlessTools
 
       def repository_uri
         @repository_uri ||= client.describe_repositories(
-          repository_names: [config.repo]
+          repository_names: [config.repo],
+          registry_id: config.registry_id
         ).repositories.first.repository_uri
       end
 
