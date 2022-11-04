@@ -29,7 +29,10 @@ module ServerlessTools
       end
 
       def image_tags
-        client.describe_images(repository_name: config.repo, registry_id: config.registry_id).image_details.flat_map(&:image_tags)
+        client.describe_images(
+          repository_name: config.repo,
+          registry_id: config.registry_id
+        ).image_details.flat_map(&:image_tags)
       end
 
       def tagged_image_uri

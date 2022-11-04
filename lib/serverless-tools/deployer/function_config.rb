@@ -10,6 +10,7 @@ module ServerlessTools
       :name,
       :dockerfile,
       :registry_id,
+      :platform,
       keyword_init: true
     ) do
       def runtime
