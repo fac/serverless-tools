@@ -8,11 +8,11 @@ module ServerlessTools
     end
 
     def build(function_json)
-      lines = ["Functions updated for sha: #{@git.sha} %0A"]
-      lines << JSON.parse(function_json).map do |function, status|
-      "> **#{function}**: #{status} %0A"
+      lines = ["Functions updated for sha: #{@git.sha}"]
+      JSON.parse(function_json).each do |function, status|
+        lines << "> **#{function}**: #{status}"
       end
-      lines.join
+      lines
     end
   end
 end
