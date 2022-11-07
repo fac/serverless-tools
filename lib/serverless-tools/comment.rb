@@ -12,7 +12,12 @@ module ServerlessTools
       JSON.parse(function_json).each do |function, status|
         lines << "> **#{function}**: #{status}"
       end
-      lines
+
+      if block_given?
+        lines.map { |line| yield line }
+      end
+
+      lines.join("\n")
     end
   end
 end

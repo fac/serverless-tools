@@ -9,10 +9,8 @@ module ServerlessTools
     desc "comment", "create Github Issue comment body"
     method_option :functions, :type => :string, :aliases => "-f", :default => "{}"
     def comment
-      comment = Comment.new.build(options[:functions])
-
       system("echo \"comment<<EOF\" >> $GITHUB_OUTPUT")
-      comment.map do |line|
+      Comment.new.build(options[:functions]) do |line|
         system("echo \"#{line}\" >> $GITHUB_OUTPUT")
       end
       system("echo \"EOF\" >> $GITHUB_OUTPUT")
