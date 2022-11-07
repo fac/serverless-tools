@@ -22,10 +22,31 @@ describe "Comment" do
     it "returns a value" do
       comment = ServerlessTools::Comment.new(git: git)
 
-      expected_result = "Functions updated for sha: 123 %0A"\
-                        "> **#{function}_status**: Succeeded %0A> **#{function}_key**: #{key} %0A"
+      expected_result = <<~EOF.strip
+        Functions updated for sha: 123
+        > **#{function}_status**: Succeeded
+        > **#{function}_key**: #{key}
+      EOF
 
       assert_equal(comment.build(function_json), expected_result)
+    end
+
+    it "yields the comment line by line if given a block" do
+      comment = ServerlessTools::Comment.new(git: git)
+
+      expected_result = [
+        "Functions updated for sha: 123",
+        "> **#{function}_status**: Succeeded",
+        "> **#{function}_key**: #{key}"
+      ]
+
+      result = []
+
+      comment.build(function_json) do |line|
+        result << line
+      end
+
+      assert_equal(result, expected_result)
     end
   end
 end

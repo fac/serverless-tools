@@ -9,8 +9,11 @@ module ServerlessTools
     desc "comment", "create Github Issue comment body"
     method_option :functions, :type => :string, :aliases => "-f", :default => "{}"
     def comment
-      comment = Comment.new.build(options[:functions])
-      system("echo \"comment=#{comment}\" >> \"$GITHUB_OUTPUT\"")
+      system("echo \"comment<<EOF\" >> $GITHUB_OUTPUT")
+      Comment.new.build(options[:functions]) do |line|
+        system("echo \"#{line}\" >> $GITHUB_OUTPUT")
+      end
+      system("echo \"EOF\" >> $GITHUB_OUTPUT")
     end
 
     desc "deploy", "publishes and deploys the specified lambda functions"
