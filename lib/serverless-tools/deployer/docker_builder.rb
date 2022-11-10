@@ -8,7 +8,7 @@ module ServerlessTools
       end
 
       def build
-        system("docker build . -f #{config.dockerfile} -t #{local_image_name}")
+        system("docker build . -f #{config.dockerfile} -t #{local_image_name} #{platform}".rstrip)
       end
 
       def output
@@ -18,6 +18,11 @@ module ServerlessTools
       end
 
       private
+
+      def platform
+        return unless config.platform
+        "--platform #{config.platform}"
+      end
 
       def local_image_name
         "#{config.repo}:latest"

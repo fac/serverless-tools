@@ -18,6 +18,23 @@ module ServerlessTools::Deployer
         subject.build
       end
 
+      describe "when platform is specified" do
+        let(:config) {
+          FunctionConfig.new(
+            name: "function_one",
+            repo: "function_one_ecr_repo",
+            dockerfile: "Dockerfile",
+            platform: "linux/amd64"
+          )
+        }
+        it "builds the image for the specific platform" do
+          subject.expects(:system).with(
+            "docker build . -f Dockerfile -t function_one_ecr_repo:latest --platform linux/amd64"
+          )
+          subject.build
+        end
+      end
+
       describe "#output" do
         it "returns local image name" do
           expected_output = {local_image_name: "function_one_ecr_repo:latest"}

@@ -40,6 +40,7 @@ It supports both lambdas with code in an S3 bucket as well as those deployed as 
 
   # Example entry in functions.yml for an function in a Docker container
   repo: serverless-tools
+  registry_id: 123456789
   dockerfile: lambda-container-context/Dockerfile
 ```
 

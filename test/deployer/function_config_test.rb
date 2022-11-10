@@ -20,6 +20,7 @@ module ServerlessTools
           name: "example_function_two_v1",
           dockerfile: "./lambda-context/Dockerfile",
           handler_file: "handler_two.R",
+          registry_id: "123456789",
           repo: "serverless-tools"
         )
       end
@@ -36,6 +37,7 @@ module ServerlessTools
         assert_equal(containerised_function_config.name, "example_function_two_v1")
         assert_equal(containerised_function_config.dockerfile, "./lambda-context/Dockerfile")
         assert_equal(containerised_function_config.handler_file, "handler_two.R")
+        assert_equal(containerised_function_config.registry_id, "123456789")
         assert_equal(containerised_function_config.repo, "serverless-tools")
       end
 
