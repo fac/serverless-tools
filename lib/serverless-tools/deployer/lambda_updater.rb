@@ -9,16 +9,20 @@ module ServerlessTools
       end
 
       def update(options)
-        options[:function_name] = config.name
+        update_options = {
+          **options,
+          function_name: config.name,
+          publish: true,
+        }
 
-        response = client.update_function_code(options)
+        response = client.update_function_code(update_options)
 
         client.wait_until(:function_updated,
           { function_name: response[:function_name] },
           { max_attempts: 10, delay: 3 }
         )
 
-        options
+        update_options
       end
 
       private

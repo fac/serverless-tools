@@ -33,7 +33,8 @@ module ServerlessTools::Deployer
         .with(
           has_entries(
             s3_bucket: bucket,
-            s3_key: key
+            s3_key: key,
+            publish: true,
           )
         ).returns(
           Aws::Lambda::Types::FunctionConfiguration.new(
@@ -51,9 +52,10 @@ module ServerlessTools::Deployer
 
     describe "#update_code" do
       it "updates lambda code" do
-        response = lambda_updater.update(options)
+        response = lambda_updater.update(options.freeze)
 
-        assert_equal(response, { **options, function_name: function_name } )
+        assert_equal(options, { s3_key: key, s3_bucket: bucket })
+        assert_equal(response, { **options, function_name: function_name, publish: true } )
       end
     end
   end
