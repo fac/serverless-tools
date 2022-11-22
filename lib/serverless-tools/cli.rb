@@ -1,6 +1,7 @@
 require "thor"
 require_relative "./comment"
 require_relative "./deployer"
+require_relative "./notifier"
 require_relative "./deployer/options"
 require_relative "./version"
 
@@ -24,6 +25,18 @@ module ServerlessTools
         action: action,
         function: function,
         options: Deployer::Options.new(**options)
+      )
+    end
+
+    desc "notify STATUS RUN_ID", "reports deployment status to Slack"
+    method_option :repo, :type => :string, :aliases => "-r", :required => true
+    method_option :channel, :type => :string, :aliases => "-c", :required => true
+    def notify(status, run_id)
+      Notifier.notify(
+        status: status,
+        run_id: run_id,
+        repo_name: options[:repo],
+        channel: options[:channel],
       )
     end
 

@@ -61,15 +61,7 @@ The deployer uses the current git HEAD for which sha to push and update.
   serverless-tools deploy update # Updates the lambda function
 ```
 
-### Comment
-
-The comment tool is intended to be used as a Github Action. It takes a json hash (assumed to be the name of a lambda function and the status of the update)
-and prints a formatted string with the Github Action expression to set an output. This output can then used to comment in a Github Issue.
-
-```zsh
-  serverless-tools comment -f '{"function_name": "Success"}'
-```
-### Github Actions
+#### Github Actions
 
 Example for a ruby project's Github workflow to build and push assets lambda code to S3.
 
@@ -112,6 +104,41 @@ jobs:
         uses: fac/serverless-tools@v0.0.2
         with:
           command: deploy push
+```
+
+### Comment
+
+The comment tool is intended to be used as a Github Action. It takes a json hash (assumed to be the name of a lambda function and the status of the update)
+and prints a formatted string with the Github Action expression to set an output. This output can then used to comment in a Github Issue.
+
+```zsh
+  serverless-tools comment -f '{"function_name": "Success"}'
+```
+
+### Notifier
+The notifier tool can be used to post messages deployment status messages to Slack. It supports messages for start,
+success, and failure of a deployment. The `notify` command takes the name of the status (`start`, `success`, `failure`) and Github workflow run id as arguments and `--repo` and Slack `--channel` name as required options.
+The `GITHUB_TOKEN` and `SLACK_TOKEN` need to be set as environment variables to allow API querying.
+
+Example Slack messages:
+
+![Notifier Slack Messages](notifier-slack-messages.png)
+
+```zsh
+  serverless-tools notify start 3546787456 --repo=fac/data-lake-management --channel=CJQNK2HAT
+```
+
+Example usage in a Github Actions workflow:
+```
+  notify-start:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: fac/serverless-tools@v0.8.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        with:
+          command: notify start ${{ github.run_id }} --repo=${{github.repository}} --channel=CJQNK2HAT
 ```
 
 ## Image
