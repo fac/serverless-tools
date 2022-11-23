@@ -30,6 +30,9 @@ module ServerlessTools::Deployer
           "docker tag #{local_image_name} #{registry_uri}/#{repo}:#{short_sha}"
         )
         subject.expects(:system).with(
+          "aws ecr get-login-password | docker login --username AWS --password-stdin #{registry_uri}/#{repo}"
+        )
+        subject.expects(:system).with(
           "docker push #{registry_uri}/#{repo}:#{short_sha}"
         )
 

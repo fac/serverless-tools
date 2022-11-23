@@ -11,6 +11,7 @@ module ServerlessTools
 
       def push(local_image_name:)
         system("docker tag #{local_image_name} #{tagged_image_uri}")
+        system("aws ecr get-login-password | docker login --username AWS --password-stdin #{repository_uri}")
         system("docker push #{tagged_image_uri}")
         asset
       end
