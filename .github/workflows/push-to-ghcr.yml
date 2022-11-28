@@ -1,0 +1,58 @@
+name: Push to Github Container Registry
+
+on:
+  push:
+    tags:
+      - "v*"
+  issue_comment:
+    types: [created]
+env:
+  IMAGE_NAME: serverless-tools-gha
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    if: (github.event.issue.pull_request && contains(github.event.comment.body, 'container push')) || ${{ startsWith(github.ref, 'refs/tags/v') }}
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Checkout Pull Request
+        if: github.event.issue
+        run: hub pr checkout ${{ github.event.issue.number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build image
+        run: |
+          docker build . \
+          --file Dockerfile \
+          --tag "$IMAGE_NAME" \
+          --label org.opencontainers.image.source=https://github.com/${{ github.repository }}
+      - name: Log in to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+      - name: Push image
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          IMAGE_ID=ghcr.io/fac/"$IMAGE_NAME"
+
+          comment="${{ github.event.comment }}"
+          ref="${{ github.ref }}"
+
+          # For issue comments, use a short sha as the version
+          if [ -n "$comment" ]
+          then
+            VERSION="$(gh api repos/${{ github.repository }}/pulls/${{ github.event.issue.number }} -q .head.sha | cut -c-7)"
+          # For tagged releases, use the version tag instead
+          elif [[ "$ref" == "refs/tags/"* ]]
+          then
+            VERSION="${ref/refs\/tags\//}"
+          fi
+
+          echo IMAGE_ID="$IMAGE_ID"
+          echo VERSION="$VERSION"
+
+          docker tag "$IMAGE_NAME" "$IMAGE_ID":"$VERSION"
+          docker push "$IMAGE_ID":"$VERSION"
