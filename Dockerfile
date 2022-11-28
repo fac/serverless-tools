@@ -8,6 +8,7 @@ ENV PATH="${PATH}:/${POETRY_HOME}/bin"
 
 COPY . .
 
+RUN gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
 RUN bundle install
 RUN bundle exec rake install
 
