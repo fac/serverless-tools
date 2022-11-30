@@ -2,7 +2,7 @@ require "minitest/autorun"
 require "mocha/minitest"
 
 require "serverless-tools/notifier"
-require "serverless-tools/notifier/message"
+require "serverless-tools/notifier/deployment_status_message"
 require "serverless-tools/notifier/slack_notifier"
 
 module ServerlessTools
@@ -14,7 +14,7 @@ module ServerlessTools
 
     describe "#notify" do
       it "sends a message to Slack" do
-        Notifier::Message.any_instance.expects(:text_for_status).with(status).returns(text)
+        Notifier::DeploymentStatusMessage.any_instance.expects(:text_for_status).with(status).returns(text)
         Notifier::SlackNotifier.any_instance.expects(:notify).with(
           channel: channel,
           username: repo,

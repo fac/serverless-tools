@@ -1,10 +1,10 @@
 require "minitest/autorun"
 require "mocha/minitest"
 
-require "serverless-tools/notifier/message"
+require "serverless-tools/notifier/deployment_status_message"
 
 module ServerlessTools::Notifier
-  describe Message do
+  describe DeploymentStatusMessage do
     let(:mock_git_client) { mock("git_client") }
     let(:repo_name) { "fac/repo-name" }
     let(:run_id) { 123 }
@@ -18,7 +18,7 @@ module ServerlessTools::Notifier
     end
 
     subject do
-      Message.new(
+      DeploymentStatusMessage.new(
         git_client: mock_git_client,
         repo_name: repo_name,
         run_id: run_id

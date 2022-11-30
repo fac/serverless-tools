@@ -3,7 +3,7 @@ require "octokit"
 
 module ServerlessTools
   module Notifier
-    class Message
+    class DeploymentStatusMessage
       def initialize(git_client: Octokit::Client.new(access_token: ENV["GITHUB_TOKEN"]), repo_name:, run_id:)
         @git_client = git_client
         @repo_name = repo_name
