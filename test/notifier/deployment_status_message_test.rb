@@ -43,28 +43,21 @@ module ServerlessTools::Notifier
               "html_url" => "https://github.com/fac/repo-name/actions/runs/3534407323",
               "run_attempt" => 1,
               "run_number" => 643,
+              "head_branch" => "branch-name",
               "head_sha" => sha,
               "pull_requests" => [
                 {
-                  "head" => {"ref" => "branch-name"},
                   "number" => 182,
                 }
               ],
               "head_commit" => {
+                "message" => "Commit message",
                 "author" => {
                   "name" => "Terry Pratchett"
                 }
               },
               "repository" => {
                 "html_url" => "https://github.com/fac/repo-name"
-              }
-            })
-
-          mock_git_client
-            .expects(:commit).with(repo_name, sha)
-            .returns({
-              "commit" => {
-                "message" => "Commit message"
               }
             })
         end
@@ -85,6 +78,37 @@ module ServerlessTools::Notifier
           expected = "❌ *FAILED* #{deploy_info}"
 
           assert_equal(subject.text_for_status("failure"), expected)
+        end
+      end
+
+      describe "when pull request info is missing" do
+        before do
+          mock_git_client
+            .expects(:workflow_run).with(repo_name, run_id)
+            .returns({
+              "html_url" => "https://github.com/fac/repo-name/actions/runs/3534407323",
+              "run_attempt" => 1,
+              "run_number" => 643,
+              "head_branch" => "branch-name",
+              "display_title" => "Commit message (#182)",
+              "head_sha" => sha,
+              "pull_requests" => [],
+              "head_commit" => {
+                "message" => "Commit message",
+                "author" => {
+                  "name" => "Terry Pratchett"
+                }
+              },
+              "repository" => {
+                "html_url" => "https://github.com/fac/repo-name"
+              }
+            })
+        end
+
+        it "still includes all the expected details in the message" do
+          expected = "🏗️ *DEPLOYING* #{deploy_info}"
+
+          assert_equal(subject.text_for_status("start"), expected)
         end
       end
     end
