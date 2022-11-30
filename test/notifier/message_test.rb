@@ -12,8 +12,7 @@ module ServerlessTools::Notifier
     let(:deploy_info) do
       "<https://github.com/fac/repo-name/actions/runs/3534407323/attempts/1|fac/repo-name/branch-name #643> " \
       "for @terry.pratchett\n" \
-      ":github: " \
-      "<https://github.com/fac/repo-name/commit/dab326e948974caba97eae82a1431d0bfcdeff36|dab326e9489> " \
+      "⚙️ <https://github.com/fac/repo-name/commit/dab326e948974caba97eae82a1431d0bfcdeff36|dab326e9489> " \
       "Commit message " \
       "(<https://github.com/fac/repo-name/pull/182|#182>)"
     end
@@ -71,19 +70,19 @@ module ServerlessTools::Notifier
         end
 
         it "returns a message for deployment start" do
-          expected = ":building_construction: *DEPLOYING* #{deploy_info}"
+          expected = "🏗️ *DEPLOYING* #{deploy_info}"
 
           assert_equal(subject.text_for_status("start"), expected)
         end
 
         it "returns a message for deployment success" do
-          expected = ":tada: *DEPLOYED* #{deploy_info}"
+          expected = "🎉 *DEPLOYED* #{deploy_info}"
 
           assert_equal(subject.text_for_status("success"), expected)
         end
 
         it "returns a message for deployment failure" do
-          expected = ":x: *FAILED* #{deploy_info}"
+          expected = "❌ *FAILED* #{deploy_info}"
 
           assert_equal(subject.text_for_status("failure"), expected)
         end

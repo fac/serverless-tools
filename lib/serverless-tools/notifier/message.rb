@@ -13,11 +13,11 @@ module ServerlessTools
       def text_for_status(status)
         case status
         when "start"
-          ":building_construction: *DEPLOYING* #{deployment_details}"
+          "🏗️ *DEPLOYING* #{deployment_details}"
         when "success"
-          ":tada: *DEPLOYED* #{deployment_details}"
+          "🎉 *DEPLOYED* #{deployment_details}"
         when "failure"
-          ":x: *FAILED* #{deployment_details}"
+          "❌ *FAILED* #{deployment_details}"
         else
           raise ArgumentError, "Unknown status: '#{status}'. Accepted values: 'start', 'success', 'failure'"
         end
@@ -48,7 +48,7 @@ module ServerlessTools
         repo_url = workflow_run_info["repository"]["html_url"]
         commit_msg = @git_client.commit(@repo_name, sha)["commit"]["message"]
 
-        ":github: <#{repo_url}/commit/#{sha}|#{short_sha}> #{commit_msg}"
+        "⚙️ <#{repo_url}/commit/#{sha}|#{short_sha}> #{commit_msg}"
       end
 
       def pr_markdown

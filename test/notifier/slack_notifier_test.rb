@@ -21,7 +21,7 @@ module ServerlessTools::Notifier
           username: username,
           text: text,
           link_names: true,
-          icon_emoji: ":github:"
+          icon_emoji: ":ship:"
         )
       end
 
