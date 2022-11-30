@@ -125,7 +125,7 @@ Example Slack messages:
 ![Notifier Slack Messages](notifier-slack-messages.png)
 
 ```zsh
-  serverless-tools notify start 3546787456 --repo=fac/data-lake-management --channel=CJQNK2HAT
+  serverless-tools notify start 3546787456 --repo=fac/data-lake-management --channel=ABCDEFGH
 ```
 
 Example usage in a Github Actions workflow:
@@ -138,7 +138,7 @@ Example usage in a Github Actions workflow:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SLACK_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         with:
-          command: notify start ${{ github.run_id }} --repo=${{github.repository}} --channel=CJQNK2HAT
+          command: notify start ${{ github.run_id }} --repo=${{github.repository}} --channel=ABCDEFGH
 ```
 
 ## Image
