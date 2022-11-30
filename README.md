@@ -44,6 +44,9 @@ It supports both lambdas with code in an S3 bucket as well as those deployed as 
   dockerfile: lambda-container-context/Dockerfile
 ```
 
+> 🍎 If you have a development machine which differs to the Docker architecture required you can use the `platform` keyword
+> to specific which platform the Image should be built for. For example, `platform: linux/amd64`
+
 ```zsh
   serverless-tools help # Run for all command options
 ```
@@ -55,10 +58,29 @@ The deployer takes 2 arguments:
 
 The deployer uses the current git HEAD for which sha to push and update.
 
+**Build**
+
+Builds the Docker Image or builds a zip file containing the Lambda code and dependencies.
 ```zsh
-  serverless-tools deploy build # Zips the file - assumes bundle install has been run and deps are in a vendor folder OR Builds a Docker image
-  serverless-tools deploy push # Pushes the zip(s) to S3 OR Pushes the Docker image to Amazon Elastic Container Registry (ECR)
-  serverless-tools deploy update # Updates the lambda function
+  serverless-tools deploy build
+```
+
+**Push**
+Pushes the build output (Zip or Image) to ECR or S3 (depending on its type).
+
+Note, to push to ECR we must login via the Docker Login command. It is advised locally to setup the
+[ECR credential helper](https://github.com/awslabs/amazon-ecr-credential-helper) to make it safer
+to login to remote repositories.
+
+```zsh
+  serverless-tools deploy push
+```
+
+**Update**
+Update the Lambda function with the latest asset version
+
+```zsh
+  serverless-tools deploy update
 ```
 
 #### Github Actions
@@ -159,7 +181,7 @@ To execute the image locally run:
 
 You can run the image to mimic the way it would be ran by a Github Action. For example:
 
-```aws-vault exec your-aws-profile -- docker container run -e AWS_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_SESSION_TOKEN -e GITHUB_ENV=/home/runner --workdir /github/workspace -v `pwd`:/github/workspace serverless-tools:latest deploy build ```
+```aws-vault exec your-aws-profile -- docker container run -e AWS_DEFAULT_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_SESSION_TOKEN -e GITHUB_ENV=/home/runner --workdir /github/workspace -v `pwd`:/github/workspace -v /var/run/docker.sock:/var/run/docker.sock serverless-tools:latest deploy build ```
 
 Breaking down this command, we can see what it does:
 
@@ -173,5 +195,7 @@ Breaking down this command, we can see what it does:
 
 
 ``-v `pwd`:/github/workspace`` We're then specifying a volume to be mounted, and we're mapping the current directory of the users machine to the working directory of the container. This accomplishes two things, firstly it provides the code that needs deploying to serverless-tools, and secondly it allows any assets which are generated to be local to the user and accessible to inspect.
+
+`-v /var/run/docker.sock:/var/run/docker.sock` Next, we're binding the hosts docker sockets to the containers, this allows us to build Docker Images 'inside' the container. It is only required to build lambda functions which are Docker based.
 
 `serverless-tools:latest deploy build` finally, we specify the image to run, and which commands to pass to it.
