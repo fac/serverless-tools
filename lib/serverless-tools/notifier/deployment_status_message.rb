@@ -29,9 +29,20 @@ module ServerlessTools
         @workflow_run_info ||= @git_client.workflow_run(@repo_name, @run_id)
       end
 
+      def pr_number
+        pull_requests = workflow_run_info["pull_requests"]
+
+        if pull_requests.any?
+          pull_requests[0]["number"]
+        else
+          # When merging into the main branch, the PR number appears in the run's display title
+          workflow_run_info["display_title"].match(%r{\(#(?<pr_number>\d{1,})\)})[:pr_number]
+        end
+      end
+
       def workflow_run_markdown
         run_url = "#{workflow_run_info["html_url"]}/attempts/#{workflow_run_info["run_attempt"]}"
-        ref = workflow_run_info["pull_requests"][0]["head"]["ref"]
+        head_branch = workflow_run_info["head_branch"]
         run_number = workflow_run_info["run_number"]
         slack_name = workflow_run_info["head_commit"]["author"]["name"]
                       .split(" ")
@@ -39,20 +50,19 @@ module ServerlessTools
                       .join(".")
                       .delete("'")
 
-        "<#{run_url}|#{@repo_name}/#{ref} ##{run_number}> for @#{slack_name}"
+        "<#{run_url}|#{@repo_name}/#{head_branch} ##{run_number}> for @#{slack_name}"
       end
 
       def commit_markdown
         sha = workflow_run_info["head_sha"]
         short_sha = sha[0, 11]
         repo_url = workflow_run_info["repository"]["html_url"]
-        commit_msg = @git_client.commit(@repo_name, sha)["commit"]["message"]
+        commit_msg = workflow_run_info["head_commit"]["message"]
 
         "⚙️ <#{repo_url}/commit/#{sha}|#{short_sha}> #{commit_msg}"
       end
 
       def pr_markdown
-        pr_number = workflow_run_info["pull_requests"][0]["number"]
         repo_url = workflow_run_info["repository"]["html_url"]
 
         "<#{repo_url}/pull/#{pr_number}|##{pr_number}>"
