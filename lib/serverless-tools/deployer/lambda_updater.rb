@@ -15,7 +15,7 @@ module ServerlessTools
 
         client.wait_until(:function_updated,
           { function_name: response[:function_name] },
-          { max_attempts: 10, delay: 3 }
+          { max_attempts: 40, delay: 3 }
         )
 
         options
