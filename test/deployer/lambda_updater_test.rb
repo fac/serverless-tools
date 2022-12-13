@@ -45,7 +45,7 @@ module ServerlessTools::Deployer
       lambda_client.expects(:wait_until).with(
         :function_updated,
         { function_name: function_name },
-        { max_attempts: 10, delay: 3 }
+        { max_attempts: 40, delay: 3 }
       ).returns(wait_response)
     end
 
