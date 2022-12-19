@@ -89,7 +89,7 @@ GEM
       gli
       hashie
       websocket-driver
-    test-unit (3.5.5)
+    test-unit (3.5.7)
       power_assert
     thor (1.2.1)
     unicode-display_width (2.3.0)
