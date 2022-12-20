@@ -33,7 +33,7 @@ jobs:
         run: |
           IMAGE_ID=ghcr.io/fac/"$IMAGE_NAME"
 
-          VERSION="${{ github.event.inputs.version }}"
+          VERSION="v${{ github.event.inputs.version }}"
 
           echo IMAGE_ID="$IMAGE_ID"
           echo VERSION="$VERSION"
