@@ -199,3 +199,14 @@ Breaking down this command, we can see what it does:
 `-v /var/run/docker.sock:/var/run/docker.sock` Next, we're binding the hosts docker sockets to the containers, this allows us to build Docker Images 'inside' the container. It is only required to build lambda functions which are Docker based.
 
 `serverless-tools:latest deploy build` finally, we specify the image to run, and which commands to pass to it.
+
+### Contributing
+
+We welcome contributions to serverless-tools -- just add new code with appropriate tests in a branch, open a PR and mark it ready for review once it's ready for someone to look it over.
+
+The repo is released as both a [Ruby gem](https://github.com/fac/serverless-tools/packages/1629067) and a [Docker container](https://github.com/fac/serverless-tools/pkgs/container/serverless-tools-gha) which can be used in Github Actions.
+In order to create a new version:
+- Bump up the version number (using [semantic versioning](https://semver.org/)) in `lib/serverless-tools/version.rb` and `Gemfile.lock`
+- Use the same version number under `runs`>`image` in `action.yml`
+- Once your PR is merged, the RubyGem and Container version will be pushed to the Github Container Registry
+- The Github Actions Workflow that published the gem will push a tag for the new version to the repo. You're encouraged to [publish a release](https://github.com/fac/serverless-tools/releases) associated with that tag once it's created.
