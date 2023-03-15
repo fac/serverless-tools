@@ -33,7 +33,7 @@ jobs:
       version: ${{ steps.release-gem.outputs.pushed-version }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
