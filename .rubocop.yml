@@ -6,6 +6,9 @@ AllCops:
     - "**/test/**/*"
     - "**/bin/**"
     - "**.rb"
+  Exclude:
+    - "**/*.yml"
+    - "**/*.py"
   TargetRubyVersion: 2.7
 
 #################### Layout ################################
