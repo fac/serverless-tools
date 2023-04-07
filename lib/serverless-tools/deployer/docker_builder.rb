@@ -1,14 +1,18 @@
 # frozen_string_literal: true
 
+require_relative "./system_call"
+
 module ServerlessTools
   module Deployer
     class DockerBuilder
+      include SystemCall
+
       def initialize(config:)
         @config = config
       end
 
       def build
-        system("docker build . -f #{config.dockerfile} -t #{local_image_name} #{platform}".rstrip)
+        system_call "docker build . -f #{config.dockerfile} -t #{local_image_name} #{platform}".rstrip
       end
 
       def output

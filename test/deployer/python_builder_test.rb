@@ -8,20 +8,16 @@ module ServerlessTools::Deployer
     let(:config) { FunctionConfig.new(name: "function_one", handler_file: "handler_file") }
     let(:subject) { PythonBuilder.new(config: config) }
 
-    def assert_file_exists?(exists = true)
-      assert_equal(File.exist?(subject.local_filename), exists)
-    end
-
     describe "#build" do
       it "creates a zip file for the Python code" do
-        assert_file_exists?(false)
+
+        subject.expects(:system_call).with("poetry build")
+        subject.expects(:system_call).with("python3 -m pip install -t lambda-package dist/*.whl")
+        subject.expects(:system_call).with("zip -jr \"function_one.zip\" handler_file")
+        subject.expects(:system_call).with("cd lambda-package && zip -r \"../function_one.zip\" ./*")
 
         subject.build
 
-        assert_file_exists?(true)
-
-        # Clean up files and directories created by Python deployer build method
-        File.delete(subject.local_filename)
       end
 
       describe "#local_filename" do

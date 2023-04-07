@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
+require_relative "./system_call"
+
 module ServerlessTools
   module Deployer
     class EcrPusher
+      include SystemCall
+
       def initialize(client:, git:, config:)
         @client = client
         @git = git
@@ -10,9 +14,9 @@ module ServerlessTools
       end
 
       def push(local_image_name:)
-        system("docker tag #{local_image_name} #{tagged_image_uri}")
-        system("aws ecr get-login-password | docker login --username AWS --password-stdin #{repository_uri}")
-        system("docker push #{tagged_image_uri}")
+        system_call "docker tag #{local_image_name} #{tagged_image_uri}"
+        system_call "aws ecr get-login-password | docker login --username AWS --password-stdin #{repository_uri}"
+        system_call "docker push #{tagged_image_uri}"
         asset
       end
 

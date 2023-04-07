@@ -1,15 +1,19 @@
 # frozen_string_literal: true
 
+require_relative "./system_call"
+
 module ServerlessTools
   module Deployer
     class RubyBuilder
+      include SystemCall
+
       def initialize(config:)
         @config = config
       end
 
       def build
-        `bundle`
-        `zip -r "#{local_filename}" #{config.handler_file} lib vendor/`
+        system_call "bundle"
+        system_call "zip -r \"#{local_filename}\" #{config.handler_file} lib vendor/"
       end
 
       def output

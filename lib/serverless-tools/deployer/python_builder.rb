@@ -1,21 +1,25 @@
 # frozen_string_literal: true
 require "fileutils"
 
+require_relative "./system_call"
+
 module ServerlessTools
   module Deployer
     class PythonBuilder
+      include SystemCall
+
       def initialize(config:)
         @config = config
       end
       # Run three commands to build the python bundle for Lambda
       def build
         # Poetry does not have an option to install dependencies to a specified target folder.
-        `poetry build`
+        system_call "poetry build"
         # Workaround is installing them using pip to specified "lambda-package" target directory
-        `python3 -m pip install -t lambda-package dist/*.whl`
+        system_call "python3 -m pip install -t lambda-package dist/*.whl"
         # Zipping lambda-package folder with the handler file in a zip as required by AWS
-        `zip -jr "#{local_filename}" #{config.handler_file}`
-        `cd lambda-package && zip -r "../#{local_filename}" ./*`
+        system_call "zip -jr \"#{local_filename}\" #{config.handler_file}"
+        system_call "cd lambda-package && zip -r \"../#{local_filename}\" ./*"
         # Clean up
         clean
       end
