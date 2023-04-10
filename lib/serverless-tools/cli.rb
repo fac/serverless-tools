@@ -44,5 +44,12 @@ module ServerlessTools
     def version
       puts VERSION
     end
+
+    # Raise errors from Thor, which will set the exit code to be
+    # non-zero which is required. Note that raising errors outside
+    # of the Thor framework will set a non-zero exit code regardless.
+    def self.exit_on_failure?
+      true
+    end
   end
 end
