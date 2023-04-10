@@ -36,7 +36,10 @@ module ServerlessTools
 
       def push
         unless pusher_should_push?
-          puts("    🛑 Assets have not been updated")
+          puts("    🛑 Assets have not been updated as they already exist.")
+          # rubocop:disable Layout/LineLength
+          puts("            To skip this check, use the --force option. Warning, this is only intended for development environments and will overwrite assets in S3 or ECR.")
+          # rubocop:enable Layout/LineLength
           return
         end
         pusher.push(**builder.output)
@@ -47,8 +50,8 @@ module ServerlessTools
         response = updater.update(pusher.output)
         puts "    ✅ Sucessfully updated"
         log_github_output(response) if running_in_github
-      rescue Aws::Lambda::Errors::ServiceError, Aws::Waiters::Errors
-        puts "    ❌ Failed to update"
+      rescue Aws::Lambda::Errors::ServiceError, Aws::Waiters::Errors => e
+        puts "    ❌ Failed to update with error message: #{e.message}"
         log_github_error if running_in_github
       end
 

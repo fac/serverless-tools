@@ -27,7 +27,7 @@ module ServerlessTools
         deployer.send(action)
       rescue NoMethodError, ArgumentError => e
         puts "Given action not known! Got #{action}, expected one of [build, push, update, deploy]"
-        puts e.message
+        raise e
       end
     end
   end

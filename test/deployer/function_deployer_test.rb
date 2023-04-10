@@ -93,8 +93,10 @@ module ServerlessTools::Deployer
         end
 
         it "logs to let the user know the assets have not been pushed" do
-          subject.expects(:puts).with("    🛑 Assets have not been updated")
-
+          subject.expects(:puts).with("    🛑 Assets have not been updated as they already exist.")
+          # rubocop:disable Layout/LineLength
+          subject.expects(:puts).with("            To skip this check, use the --force option. Warning, this is only intended for development environments and will overwrite assets in S3 or ECR.")
+          # rubocop:enable Layout/LineLength
           subject.push
         end
       end
@@ -145,7 +147,7 @@ module ServerlessTools::Deployer
           updater.expects(:update).with(s3_key: key,
 s3_bucket: bucket).raises(Aws::Lambda::Errors::ServiceError.new(mock, "Test Error"))
 
-          subject.expects(:puts).with("    ❌ Failed to update")
+          subject.expects(:puts).with("    ❌ Failed to update with error message: Test Error")
 
           subject.update
         end
@@ -158,7 +160,7 @@ s3_bucket: bucket).raises(Aws::Lambda::Errors::ServiceError.new(mock, "Test Erro
             updater.expects(:update).with(s3_key: key,
 s3_bucket: bucket).raises(Aws::Lambda::Errors::ServiceError.new(mock, "Test Error"))
 
-            subject.expects(:puts).with("    ❌ Failed to update")
+            subject.expects(:puts).with("    ❌ Failed to update with error message: Test Error")
             subject.expects(:system).with("echo \"#{function_name}_status=Failed\" >> \"$GITHUB_OUTPUT\"")
 
             subject.update
