@@ -26,7 +26,6 @@ module ServerlessTools::Deployer
     end
 
     let(:options) { Options.new }
-    let(:in_github) { "" }
 
     subject do
       FunctionDeployer.new(
@@ -35,7 +34,6 @@ module ServerlessTools::Deployer
         builder: builder,
         options: options,
         config: config,
-        in_github: in_github,
       )
     end
 
@@ -126,22 +124,8 @@ module ServerlessTools::Deployer
         subject.update
       end
 
-      describe "and the deployer is running on Github" do
-        let(:in_github) { "GITHUB_ENV" }
-        it "logs an output for github" do
-          pusher.expects(:output).returns(s3_config)
-
-          updater.expects(:update).with(s3_key: key, s3_bucket: bucket).returns(s3_update_output)
-
-          subject.expects(:puts).with("    ✅ Sucessfully updated")
-          subject.expects(:system).with("echo \"#{function_name}_status=Success\" >> \"$GITHUB_OUTPUT\"")
-
-          subject.update
-        end
-      end
-
       describe "when the update fails" do
-        it "logs an appropriate failed message" do
+        it "logs an appropriate failed message and raises the error" do
           pusher.expects(:output).returns({ s3_key: key, s3_bucket: bucket })
 
           updater.expects(:update).with(s3_key: key,
@@ -149,20 +133,7 @@ s3_bucket: bucket).raises(Aws::Lambda::Errors::ServiceError.new(mock, "Test Erro
 
           subject.expects(:puts).with("    ❌ Failed to update with error message: Test Error")
 
-          subject.update
-        end
-
-        describe("and the deployer is running on Github") do
-          let(:in_github) { "GITHUB_ENV" }
-          it "logs an output error for github" do
-            pusher.expects(:output).returns({ s3_key: key, s3_bucket: bucket })
-
-            updater.expects(:update).with(s3_key: key,
-s3_bucket: bucket).raises(Aws::Lambda::Errors::ServiceError.new(mock, "Test Error"))
-
-            subject.expects(:puts).with("    ❌ Failed to update with error message: Test Error")
-            subject.expects(:system).with("echo \"#{function_name}_status=Failed\" >> \"$GITHUB_OUTPUT\"")
-
+          assert_raises Aws::Lambda::Errors::ServiceError do
             subject.update
           end
         end
