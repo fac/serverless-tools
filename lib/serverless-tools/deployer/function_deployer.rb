@@ -37,7 +37,9 @@ module ServerlessTools
       def push
         unless pusher_should_push?
           puts("    🛑 Assets have not been updated as they already exist.")
+          # rubocop:disable Layout/LineLength
           puts("            To skip this check, use the --force option. Warning, this is only intended for development environments and will overwrite assets in S3 or ECR.")
+          # rubocop:enable Layout/LineLength
           return
         end
         pusher.push(**builder.output)

@@ -94,8 +94,9 @@ module ServerlessTools::Deployer
 
         it "logs to let the user know the assets have not been pushed" do
           subject.expects(:puts).with("    🛑 Assets have not been updated as they already exist.")
+          # rubocop:disable Layout/LineLength
           subject.expects(:puts).with("            To skip this check, use the --force option. Warning, this is only intended for development environments and will overwrite assets in S3 or ECR.")
-
+          # rubocop:enable Layout/LineLength
           subject.push
         end
       end
