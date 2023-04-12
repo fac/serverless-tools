@@ -210,3 +210,19 @@ In order to create a new version:
 - Use the same version number under `runs`>`image` in `action.yml`
 - Once your PR is merged, the RubyGem and Container version will be pushed to the Github Container Registry
 - The Github Actions Workflow that published the gem will push a tag for the new version to the repo. You're encouraged to [publish a release](https://github.com/fac/serverless-tools/releases) associated with that tag once it's created.
+
+### Testing Changes
+
+There are various challenges to testing serverless tools as a GitHub Action locally. While running the image locally can provide some confidence, the nature of not controlling the GitHub Runner or how it mounts and runs the container can result in edge cases and errors.
+
+One way to test changes prior to release is to create a pull request with your changes and update the `image` argument value in the `action.yml` file to "Dockerfile". Then, reference your branch where serverless tools are being used. For example:
+
+```
+- name: build assets
+        uses: fac/serverless-tools@your-branch
+        with:
+          command: deploy build
+
+```
+
+Through this process, changes can be tested before merging. Be sure to update the `image` value in `action.yml` to the version you will release once testing is complete.
