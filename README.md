@@ -161,6 +161,7 @@ Example usage in a Github Actions workflow:
           SLACK_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         with:
           command: notify start ${{ github.run_id }} --repo=${{github.repository}} --channel=ABCDEFGH
+        continue-on-error: true
 ```
 
 ## Image
