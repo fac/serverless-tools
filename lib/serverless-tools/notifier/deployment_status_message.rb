@@ -59,8 +59,11 @@ module ServerlessTools
         run_url = "#{workflow_run_info["html_url"]}/attempts/#{workflow_run_info["run_attempt"]}"
         head_branch = workflow_run_info["head_branch"]
         run_number = workflow_run_info["run_number"]
+
+        delimiters = [" ", /(?=[A-Z])/]
         slack_name = workflow_run_info["head_commit"]["author"]["name"]
-                      .split(" ")
+                      .gsub( /\d+/,"")
+                      .split(Regexp.union(delimiters))
                       .map(&:downcase)
                       .join(".")
                       .delete("'")

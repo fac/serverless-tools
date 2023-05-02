@@ -140,6 +140,36 @@ module ServerlessTools::Notifier
           end
         end
       end
+
+      describe "when author name follows unusual formatting" do
+        before do
+          mock_git_client
+            .expects(:workflow_run).with(repo_name, run_id)
+            .returns({
+              "html_url" => "https://github.com/fac/repo-name/actions/runs/3534407323",
+              "run_attempt" => 1,
+              "run_number" => 643,
+              "head_branch" => "branch-name",
+              "pull_requests" => [],
+              "head_commit" => {
+                "id" => sha,
+                "message" => "Commit message (#182)",
+                "author" => {
+                  "name" => "TerryPratchett123"
+                }
+              },
+              "repository" => {
+                "html_url" => "https://github.com/fac/repo-name"
+              }
+            })
+        end
+
+        it "formats the name correctly for Slack" do
+          expected = "🏗️ *DEPLOYING* #{deploy_info}"
+
+          assert_equal(subject.text_for_status("start"), expected)
+        end
+      end
     end
   end
 end
