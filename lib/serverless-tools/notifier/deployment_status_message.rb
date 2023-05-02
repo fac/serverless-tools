@@ -29,14 +29,29 @@ module ServerlessTools
         @workflow_run_info ||= @git_client.workflow_run(@repo_name, @run_id)
       end
 
-      def pr_number
+      def repo_url
+        @repo_url ||= workflow_run_info["repository"]["html_url"]
+      end
+
+      def pr_markdown
+        commit_msg = workflow_run_info["head_commit"]["message"]
         pull_requests = workflow_run_info["pull_requests"]
 
         if pull_requests.any?
-          pull_requests[0]["number"]
+          # For certain actions (like pushing to the repo), the workflow run info contains direct references to
+          # the relevant pull request (which includes the PR number but not the title). In this case, we
+          # combine the message of the head commit with a link to the PR.
+          pr_number = pull_requests[0]["number"]
+          "#{commit_msg} (<#{repo_url}/pull/#{pr_number}|##{pr_number}>)"
         else
-          # When merging into the main branch, the PR number appears in the run's display title
-          workflow_run_info["display_title"].match(%r{\(#(?<pr_number>\d{1,})\)})[:pr_number]
+          # When merging into the main branch, we don't get a reference to the PR directly, however the PR number
+          # should appear in the message of the head commit.
+          matches = commit_msg.match(%r{\(#(?<pr_number>\d{1,})\)})
+          pr_number = matches[:pr_number] if matches
+
+          # If we manage to find the PR number in the commit, we can add a link to it in the deployment message.
+          # Otherwise, we just return the bare commit message.
+          pr_number ? commit_msg.sub("##{pr_number}", "<#{repo_url}/pull/#{pr_number}|##{pr_number}>") : commit_msg
         end
       end
 
@@ -54,22 +69,14 @@ module ServerlessTools
       end
 
       def commit_markdown
-        sha = workflow_run_info["head_sha"]
+        sha = workflow_run_info["head_commit"]["id"]
         short_sha = sha[0, 11]
-        repo_url = workflow_run_info["repository"]["html_url"]
-        commit_msg = workflow_run_info["head_commit"]["message"]
 
-        "⚙️ <#{repo_url}/commit/#{sha}|#{short_sha}> #{commit_msg}"
-      end
-
-      def pr_markdown
-        repo_url = workflow_run_info["repository"]["html_url"]
-
-        "<#{repo_url}/pull/#{pr_number}|##{pr_number}>"
+        "<#{repo_url}/commit/#{sha}|#{short_sha}>"
       end
 
       def deployment_details
-        @deployment_details ||= "#{workflow_run_markdown}\n#{commit_markdown} (#{pr_markdown})"
+        @deployment_details ||= "#{workflow_run_markdown}\n⚙️ #{commit_markdown} #{pr_markdown}"
       end
     end
   end
