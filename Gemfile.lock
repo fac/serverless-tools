@@ -59,7 +59,7 @@ GEM
     parallel (1.23.0)
     parser (3.2.2.0)
       ast (~> 2.4.1)
-    power_assert (2.0.2)
+    power_assert (2.0.3)
     public_suffix (5.0.1)
     rainbow (3.1.1)
     rake (13.0.6)
@@ -88,7 +88,7 @@ GEM
       faraday-multipart
       gli
       hashie
-    test-unit (3.5.7)
+    test-unit (3.5.8)
       power_assert
     thor (1.2.1)
     unicode-display_width (2.4.2)
