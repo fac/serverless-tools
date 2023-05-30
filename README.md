@@ -220,7 +220,15 @@ To release your PR's changes, you need to take a few extra steps before merging.
    * `git add Gemfile.lock action.yml`
    * `git commit --amend -CHEAD`
 
-Once your PR is merged, the RubyGem and Container version will be pushed to the Github Container Registry.  The Github Actions Workflow that published the gem will push a tag for the new version to the repo. You're encouraged to [publish a release](https://github.com/fac/serverless-tools/releases) associated with that tag once it's created.
+Once your PR is merged, the RubyGem and Container version will be pushed to the Github Container Registry
+
+The Github Actions Workflow that published the gem will push a tag for the new version to the repo. An new draft release will automatically be created a few minutes later. To publish it:
+1. Open [the gem's list of releases](https://github.com/fac/serverless-tools/releases).
+1. Click on **Draft a new release**
+1. In the **Choose a tag** dropdown, select the tag for the gem version you just released
+   - If that version isn't listed, wait a minute or two and refresh the page
+1. Click **Generate release notes**, review the notes
+1. Publish it
 
 ### Testing Changes
 
