@@ -205,12 +205,22 @@ Breaking down this command, we can see what it does:
 
 We welcome contributions to serverless-tools -- just add new code with appropriate tests in a branch, open a PR and mark it ready for review once it's ready for someone to look it over.
 
+### Releasing
 The repo is released as both a [Ruby gem](https://github.com/fac/serverless-tools/packages/1629067) and a [Docker container](https://github.com/fac/serverless-tools/pkgs/container/serverless-tools-gha) which can be used in Github Actions.
-In order to create a new version:
-- Bump up the version number (using [semantic versioning](https://semver.org/)) in `lib/serverless-tools/version.rb` and `Gemfile.lock`
-- Use the same version number under `runs`>`image` in `action.yml`
-- Once your PR is merged, the RubyGem and Container version will be pushed to the Github Container Registry
-- The Github Actions Workflow that published the gem will push a tag for the new version to the repo. You're encouraged to [publish a release](https://github.com/fac/serverless-tools/releases) associated with that tag once it's created.
+
+To release your PR's changes, you need to take a few extra steps before merging. Assuming you've set up your development environment by running `bundle install`, they are:
+1. Bump the version number. We like to use [semantic versioning](https://semver.org/)), so choose whether you think your change is a patch, minor, or major bump.
+   * Update it in the gem: `gem bump -v [major|minor|patch]`
+   * Update it in the `Gemfile.lock`: `bundle install`
+   * Update it in the action metadata:
+     1. Open `action.yml`
+     1. Find the line like `docker://ghcr.io/fac/serverless-tools-gha:v0.0.0`
+     1. Update the image tag to match the version you just bumped to, replacing the `v0.0.0` in the line from the previous step
+1. Commit the version bump. `gem bump` will have created a commit for you, so just:
+   * `git add Gemfile.lock action.yml`
+   * `git commit --amend -CHEAD`
+
+Once your PR is merged, the RubyGem and Container version will be pushed to the Github Container Registry.  The Github Actions Workflow that published the gem will push a tag for the new version to the repo. You're encouraged to [publish a release](https://github.com/fac/serverless-tools/releases) associated with that tag once it's created.
 
 ### Testing Changes
 
