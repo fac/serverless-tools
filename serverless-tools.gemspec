@@ -41,6 +41,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "minitest", "~> 5.0"
   spec.add_development_dependency "test-unit"
   spec.add_development_dependency "mocha"
+  spec.add_development_dependency "gem-release"
+
 
   spec.add_runtime_dependency "aws-sdk-lambda"
   spec.add_runtime_dependency "aws-sdk-s3"
