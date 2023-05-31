@@ -46,6 +46,7 @@ GEM
     faraday-multipart (1.0.4)
       multipart-post (~> 2)
     faraday-net_http (3.0.2)
+    gem-release (2.2.2)
     gli (2.21.0)
     hashie (5.0.0)
     jmespath (1.6.2)
@@ -98,6 +99,7 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 2.3)
+  gem-release
   minitest (~> 5.0)
   mocha
   rake
