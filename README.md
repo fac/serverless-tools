@@ -209,7 +209,7 @@ We welcome contributions to serverless-tools -- just add new code with appropria
 The repo is released as both a [Ruby gem](https://github.com/fac/serverless-tools/packages/1629067) and a [Docker container](https://github.com/fac/serverless-tools/pkgs/container/serverless-tools-gha) which can be used in Github Actions.
 
 To release your PR's changes, you need to take a few extra steps before merging. Assuming you've set up your development environment by running `bundle install`, they are:
-1. Bump the version number. We like to use [semantic versioning](https://semver.org/)), so choose whether you think your change is a patch, minor, or major bump.
+1. Bump the version number. We like to use [semantic versioning](https://semver.org/), so choose whether you think your change is a patch, minor, or major bump.
    * Update it in the gem: `gem bump -v [major|minor|patch]`
    * Update it in the `Gemfile.lock`: `bundle install`
    * Update it in the action metadata:
@@ -222,7 +222,7 @@ To release your PR's changes, you need to take a few extra steps before merging.
 
 Once your PR is merged, the RubyGem and Container version will be pushed to the Github Container Registry
 
-The Github Actions Workflow that published the gem will push a tag for the new version to the repo. An new draft release will automatically be created a few minutes later. To publish it:
+The Github Actions Workflow that published the gem will push a tag for the new version to the repo. A new draft release will automatically be created a few minutes later. To publish it:
 1. Open [the gem's list of releases](https://github.com/fac/serverless-tools/releases).
 1. Click on **Draft a new release**
 1. In the **Choose a tag** dropdown, select the tag for the gem version you just released
