@@ -18,7 +18,7 @@ jobs:
     name: Bump Gem / Create PR
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       pull-requests: write
 
     steps:
