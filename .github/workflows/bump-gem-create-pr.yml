@@ -41,8 +41,12 @@ jobs:
           branch: ${{ github.event.inputs.new-gem-version || 'patch' }}-${{ github.actor }}
           create_branch: true
           push_options: '--force'
-      - env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh pr create --title "Gem bump $NEW_VERSION - ${{ github.actor }}" --fill
+      # Blocked on creating a pull requests until this is resolved:
+      # https://github.com/fac/dev-platform/issues/1673
+      #
+      # - name: Create pull request
+      #   env:
+      #     GH_TOKEN: ${{ github.token }}
+      #   run: |
+      #     gh pr create --title "Gem bump $NEW_VERSION - ${{ github.actor }}" --fill
 
