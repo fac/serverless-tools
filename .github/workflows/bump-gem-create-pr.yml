@@ -1,9 +1,11 @@
 name: Bump Gem / Create PR
 on:
+  push:
   workflow_dispatch:
     inputs:
       new-gem-version:
         type: choice
+        default: minor
         options:
           - major
           - minor
@@ -31,6 +33,5 @@ jobs:
           ruby -pi.bak -e "gsub(/serverless-tools-gha\:.*\"/, 'serverless-tools-gha:v$NEW_VERSION\"')" action.yml
           git add Gemfile.lock action.yml
           git commit --amend -CHEAD
+          # git push git@github.com:fac/serverless-tools.git
           gh pr create --title "Gem bump $NEW_VERSION" --body "Gem bump"
-
-
