@@ -1,0 +1,11 @@
+name: "ServerlessTools"
+description: "Manage Serverless functions."
+inputs:
+  command:
+    description: "which command to run via the serverless-tools cli"
+    required: true
+runs:
+  using: "docker"
+  image: "docker://ghcr.io/fac/serverless-tools-gha:v0.14.5"
+  args:
+    - ${{ inputs.command }}

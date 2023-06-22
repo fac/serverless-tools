@@ -1,0 +1,36 @@
+name: Bump Gem / Create PR
+on:
+  workflow_dispatch:
+    inputs:
+      new-gem-version:
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+          - pre
+          - release
+        required: true
+
+jobs:
+  release:
+    name: Bump Gem / Create PR
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - run: |
+          git checkout -b ${{ github.event.inputs.new-gem-version }}-${{ github.actor }}-$(date +'%d-%m')
+          gem bump --version ${{ github.event.inputs.new-gem-version }}
+          NEW_VERSION=$(ruby -e "require_relative './lib/serverless-tools/version.rb'; puts ServerlessTools::VERSION")
+          bundle install
+          ruby -pi.bak -e "gsub(/serverless-tools-gha\:.*\"/, 'serverless-tools-gha:v$NEW_VERSION\"')" action.yml
+          git add Gemfile.lock action.yml
+          git commit --amend -CHEAD
+          gh pr create --title "Gem bump $NEW_VERSION" --body "Gem bump"
+
+
