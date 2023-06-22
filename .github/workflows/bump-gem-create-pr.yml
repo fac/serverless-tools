@@ -41,8 +41,6 @@ jobs:
           branch: ${{ github.event.inputs.new-gem-version || 'patch' }}-${{ github.actor }}
           create_branch: true
           push_options: '--force'
-      - env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
+      - run: |
           gh pr create --title "Gem bump $NEW_VERSION - ${{ github.actor }}" --fill
 
