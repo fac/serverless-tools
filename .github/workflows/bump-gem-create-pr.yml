@@ -25,12 +25,12 @@ jobs:
         with:
           bundler-cache: true
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
       - run: |
           NEW_GEM_VERSION_OPTION=${{ github.event.inputs.new-gem-version || 'patch' }}
           git checkout -b $NEW_GEM_VERSION_OPTION-${{ github.actor }}-$(date +'%d-%m')
-          gem bump --version $NEW_GEM_VERSION_OPTION
+          bundle exec gem bump --version $NEW_GEM_VERSION_OPTION
           NEW_VERSION=$(ruby -e "require_relative './lib/serverless-tools/version.rb'; puts ServerlessTools::VERSION")
           bundle install
           ruby -pi.bak -e "gsub(/serverless-tools-gha\:.*\"/, 'serverless-tools-gha:v$NEW_VERSION\"')" action.yml
