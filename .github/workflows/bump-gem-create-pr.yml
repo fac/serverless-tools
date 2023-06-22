@@ -28,7 +28,7 @@ jobs:
       - run: |
           NEW_GEM_VERSION_OPTION=${{ github.event.inputs.new-gem-version || 'patch' }}
 
-          bundle exec gem bump --version $NEW_GEM_VERSION_OPTION
+          bundle exec gem bump --version $NEW_GEM_VERSION_OPTION --no-commit
           NEW_VERSION=$(ruby -e "require_relative './lib/serverless-tools/version.rb'; puts ServerlessTools::VERSION")
           bundle install
           ruby -pi.bak -e "gsub(/serverless-tools-gha\:.*\"/, 'serverless-tools-gha:v$NEW_VERSION\"')" action.yml
