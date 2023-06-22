@@ -39,6 +39,8 @@ jobs:
           create_branch: true
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        permissions:
+          pull-requests: write
         run: |
           gh pr create --title "Gem bump $NEW_VERSION - ${{ github.actor }}" --fill
 
