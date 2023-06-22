@@ -30,6 +30,7 @@ jobs:
 
           bundle exec gem bump --version $NEW_GEM_VERSION_OPTION --no-commit
           NEW_VERSION=$(ruby -r ./lib/serverless-tools/version.rb -e "puts ServerlessTools::VERSION")
+          bundle config unset deployment
           bundle install
           ruby -pi.bak -e "gsub(/serverless-tools-gha\:.*\"/, 'serverless-tools-gha:v$NEW_VERSION\"')" action.yml
                 
