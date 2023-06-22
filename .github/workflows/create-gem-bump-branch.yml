@@ -1,0 +1,42 @@
+name: Create Gem Bump Branch
+on:
+  workflow_dispatch:
+    inputs:
+      new-gem-version:
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+          - pre
+          - release
+        required: true
+
+jobs:
+  release:
+    name: Bump Gem / Create PR
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - run: |
+          bundle exec gem bump --version ${{ github.event.inputs.new-gem-version || 'patch' }} --no-commit
+          NEW_VERSION=$(ruby -r ./lib/serverless-tools/version.rb -e "puts ServerlessTools::VERSION")
+          bundle config unset deployment
+          bundle install
+          ruby -pi.bak -e "gsub(/serverless-tools-gha\:.*\"/, 'serverless-tools-gha:v$NEW_VERSION\"')" action.yml
+                
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Gem bump $NEW_VERSION - ${{ github.actor }}
+          file_pattern: 'action.yml Gemfile.lock lib/serverless-tools/version.rb'
+          branch: ${{ github.event.inputs.new-gem-version }}-${{ github.actor }}
+          create_branch: false
+          push_options: '--force'
