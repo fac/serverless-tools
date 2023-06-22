@@ -24,6 +24,8 @@ jobs:
         with:
           bundler-cache: true
 
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       - run: |
           NEW_GEM_VERSION_OPTION=${{ github.event.inputs.new-gem-version || 'patch' }}
           git checkout -b $NEW_GEM_VERSION_OPTION-${{ github.actor }}-$(date +'%d-%m')
