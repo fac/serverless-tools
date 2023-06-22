@@ -17,6 +17,9 @@ jobs:
   release:
     name: Bump Gem / Create PR
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
 
     steps:
       - uses: actions/checkout@v3
@@ -39,8 +42,6 @@ jobs:
           create_branch: true
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        permissions:
-          pull-requests: write
         run: |
           gh pr create --title "Gem bump $NEW_VERSION - ${{ github.actor }}" --fill
 
