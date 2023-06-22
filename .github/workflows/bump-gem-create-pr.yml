@@ -26,9 +26,7 @@ jobs:
           bundler-cache: true
 
       - run: |
-          NEW_GEM_VERSION_OPTION=${{ github.event.inputs.new-gem-version || 'patch' }}
-
-          bundle exec gem bump --version $NEW_GEM_VERSION_OPTION --no-commit
+          bundle exec gem bump --version ${{ github.event.inputs.new-gem-version || 'patch' }} --no-commit
           NEW_VERSION=$(ruby -r ./lib/serverless-tools/version.rb -e "puts ServerlessTools::VERSION")
           bundle config unset deployment
           bundle install
@@ -37,7 +35,7 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Gem bump $NEW_VERSION - ${{ github.actor }}
-          branch: $NEW_GEM_VERSION_OPTION-${{ github.actor }}-$(date +'%d-%m')
+          branch: ${{ github.event.inputs.new-gem-version || 'patch' }}-${{ github.actor }}
           create_branch: true
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
