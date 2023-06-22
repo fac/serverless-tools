@@ -38,12 +38,13 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Gem bump $NEW_VERSION - ${{ github.actor }}
+          file_pattern: 'action.yml Gemfile.lock lib/serverless-tools/version.rb'
           branch: ${{ github.event.inputs.new-gem-version || 'patch' }}-${{ github.actor }}
           create_branch: true
           push_options: '--force'
       # Blocked on creating a pull requests until this is resolved:
       # https://github.com/fac/dev-platform/issues/1673
-      #
+      #pr
       # - name: Create pull request
       #   env:
       #     GH_TOKEN: ${{ github.token }}
