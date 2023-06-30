@@ -93,7 +93,7 @@ GEM
       faraday-multipart
       gli
       hashie
-    test-unit (3.6.0)
+    test-unit (3.6.1)
       power_assert
     thor (1.2.2)
     unicode-display_width (2.4.2)
