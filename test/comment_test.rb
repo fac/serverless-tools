@@ -1,3 +1,7 @@
+# required while Mocha is stuck on 1.6
+# see https://github.com/fac/serverless-tools/issues/180
+ENV["MT_COMPAT"] = "1"
+
 require "minitest/autorun"
 require "mocha/minitest"
 
