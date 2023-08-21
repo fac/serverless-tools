@@ -1,9 +1,8 @@
 name: Create Gem Bump Branch
 on:
-  push:
   workflow_dispatch:
     inputs:
-      new-gem-version:
+      version-bump-significance:
         type: choice
         options:
           - major
@@ -27,23 +26,44 @@ jobs:
         with:
           bundler-cache: true
 
-      - run: |
-          bundle exec gem bump --version ${{ github.event.inputs.new-gem-version || 'patch' }} --no-commit
-          NEW_VERSION=$(ruby -r ./lib/serverless-tools/version.rb -e "puts ServerlessTools::VERSION")
+      - name: Set version bump significance
+        id: set-bump-type
+        run: |
+          echo "bump_type=${{ github.event.inputs.version-bump-significance || 'patch'}}" >> "$GITHUB_OUTPUT"
 
+      - name: Perform gem bump
+        run: |
+          bundle exec gem bump \
+            --version ${{ steps.set-bump-type.outputs.bump_type }} \
+            --no-commit
+
+      - name: Update action.yml with new version
+        run: |
+          NEW_VERSION=$(ruby \
+            -r ./lib/serverless-tools/version.rb \
+            -e "puts ServerlessTools::VERSION"\
+          )
+
+          ruby -pi \
+          -e "gsub( \
+            /serverless-tools-gha\:.*\"/, \
+            'serverless-tools-gha:v$NEW_VERSION\"' \
+          )" action.yml
+
+      - name: Bundle install with new version
+        run: |
           bundle config unset deployment
           bundle install
-          ruby -pi -e "gsub(/serverless-tools-gha\:.*\"/, 'serverless-tools-gha:v$NEW_VERSION\"')" action.yml
-                
+
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Gem bump $NEW_VERSION - ${{ github.actor }}
           file_pattern: 'action.yml Gemfile.lock lib/serverless-tools/version.rb'
-          branch: ${{ github.event.inputs.new-gem-version || 'patch' }}-${{ github.actor }}
+          branch: ${{ steps.set-bump-type.outputs.bump_type }}-${{ github.actor }}
           create_branch: true
           push_options: '--force'
 
       - name: Post link to branch
         run: |
-          GITHUB_NEW_PR_URL="https://github.com/fac/serverless-tools/compare/${{ github.event.inputs.new-gem-version || 'patch' }}-${{ github.actor }}?expand=1"
+          GITHUB_NEW_PR_URL="https://github.com/fac/serverless-tools/compare/${{ steps.set-bump-type.outputs.bump_type }}-${{ github.actor }}?expand=1"
           echo "::notice::Create a PR here: ${GITHUB_NEW_PR_URL}"
