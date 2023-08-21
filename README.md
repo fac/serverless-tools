@@ -208,7 +208,11 @@ We welcome contributions to serverless-tools -- just add new code with appropria
 ### Releasing
 The repo is released as both a [Ruby gem](https://github.com/fac/serverless-tools/packages/1629067) and a [Docker container](https://github.com/fac/serverless-tools/pkgs/container/serverless-tools-gha) which can be used in Github Actions.
 
-To release your PR's changes, you need to take a few extra steps before merging. Assuming you've set up your development environment by running `bundle install`, they are:
+To release your PR's changes, [manually dispatch this workflow to create a version bump for the repo]([url](https://github.com/fac/serverless-tools/actions/workflows/create-gem-bump-branch.yml)).
+
+<details>
+  <summary>Or do it manually:</summary>
+
 1. Bump the version number. We like to use [semantic versioning](https://semver.org/), so choose whether you think your change is a patch, minor, or major bump.
    * Update it in the gem: `gem bump -v [major|minor|patch]`
    * Update it in the `Gemfile.lock`: `bundle install`
@@ -219,6 +223,8 @@ To release your PR's changes, you need to take a few extra steps before merging.
 1. Commit the version bump. `gem bump` will have created a commit for you, so just:
    * `git add Gemfile.lock action.yml`
    * `git commit --amend -CHEAD`
+
+</details>
 
 Once your PR is merged, the RubyGem and Container version will be pushed to the Github Container Registry
 
