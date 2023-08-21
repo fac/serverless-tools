@@ -1,5 +1,5 @@
 module ServerlessTools
   # When updating the version, also update the verion specified in the image tag
   # of the action.yml.
-  VERSION = "0.14.12"
+  VERSION = "0.15.0"
 end
