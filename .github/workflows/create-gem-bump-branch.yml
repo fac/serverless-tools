@@ -1,5 +1,6 @@
 name: Create Gem Bump Branch
 on:
+  push:
   workflow_dispatch:
     inputs:
       version-bump-significance:
