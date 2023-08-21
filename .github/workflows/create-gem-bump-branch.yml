@@ -27,11 +27,11 @@ jobs:
           bundler-cache: true
 
       - run: |
-          bundle exec gem bump --version ${{ github.event.inputs.new-gem-version || 'patch' }} --no-commit
+          bundle exec gem bump --version ${{ github.event.inputs.new-gem-version }} --no-commit
           NEW_VERSION=$(ruby -r ./lib/serverless-tools/version.rb -e "puts ServerlessTools::VERSION")
           bundle config unset deployment
           bundle install
-          ruby -pi.bak -e "gsub(/serverless-tools-gha\:.*\"/, 'serverless-tools-gha:v$NEW_VERSION\"')" action.yml
+          ruby -pi -e "gsub(/serverless-tools-gha\:.*\"/, 'serverless-tools-gha:v$NEW_VERSION\"')" action.yml
                 
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
