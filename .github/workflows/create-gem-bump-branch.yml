@@ -58,7 +58,7 @@ jobs:
 
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: Gem bump $NEW_VERSION - ${{ github.actor }}
+          commit_message: ${{ steps.set-bump-type.outputs.bump_type }} gem bump - ${{ github.actor }}
           file_pattern: 'action.yml Gemfile.lock lib/serverless-tools/version.rb'
           branch: ${{ steps.set-bump-type.outputs.bump_type }}-${{ github.actor }}
           create_branch: true
