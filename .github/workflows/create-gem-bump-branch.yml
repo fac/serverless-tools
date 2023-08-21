@@ -4,6 +4,7 @@ on:
     inputs:
       version-bump-significance:
         type: choice
+        default: 'patch'
         options:
           - major
           - minor
