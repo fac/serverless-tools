@@ -52,12 +52,12 @@ module ServerlessTools::Deployer
         before do
           ecr.stub_responses(
             :describe_images,
-            { image_details: [{ image_tags: [] }] },
-            { image_details: [{ image_tags: [short_sha] }] }
+            { image_details: [{ image_tags: ["8910111"] }] }
           )
         end
 
         it "returns an empty hash" do
+          ServerlessTools::Logging.logger.expects(:debug).with("Unable to find tag 1234567 in [\"8910111\"]")
           assert_equal(subject.output, {})
         end
       end

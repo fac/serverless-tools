@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "./system_call"
+require_relative "../logging"
 
 module ServerlessTools
   module Deployer
@@ -21,8 +22,12 @@ module ServerlessTools
       end
 
       def output
-        return {} unless image_tags.include?(tag)
-        asset
+        tags = image_tags
+        if tags.include?(tag)
+          return asset
+        end
+        Logging.logger.debug("Unable to find tag #{tag} in #{tags}")
+        {}
       end
 
       private
