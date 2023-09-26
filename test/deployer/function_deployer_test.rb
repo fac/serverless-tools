@@ -50,7 +50,7 @@ module ServerlessTools::Deployer
         pusher.expects(:output).returns({})
         pusher.expects(:push).with(local_filename: key)
 
-        updater.expects(:update).with(s3_key: key, s3_bucket: bucket)
+        updater.expects(:update).with({s3_key: key, s3_bucket: bucket})
 
         subject.deploy
       end
@@ -117,7 +117,7 @@ module ServerlessTools::Deployer
       it "calls the update method of the updater with the config" do
         pusher.expects(:output).returns(s3_config)
 
-        updater.expects(:update).with(s3_key: key, s3_bucket: bucket).returns(s3_update_output)
+        updater.expects(:update).with({s3_key: key, s3_bucket: bucket}).returns(s3_update_output)
 
         subject.expects(:puts).with("    ✅ Sucessfully updated")
 
@@ -128,8 +128,8 @@ module ServerlessTools::Deployer
         it "logs an appropriate failed message and raises the error" do
           pusher.expects(:output).returns({ s3_key: key, s3_bucket: bucket })
 
-          updater.expects(:update).with(s3_key: key,
-s3_bucket: bucket).raises(Aws::Lambda::Errors::ServiceError.new(mock, "Test Error"))
+          updater.expects(:update).with({s3_key: key,
+s3_bucket: bucket}).raises(Aws::Lambda::Errors::ServiceError.new(mock, "Test Error"))
 
           subject.expects(:puts).with("    ❌ Failed to update with error message: Test Error")
 

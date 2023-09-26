@@ -9,4 +9,8 @@ echo ">>> Running serverless-tools"
 # see here: https://github.com/fac/serverless-tools/issues/120
 git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
+# Ensure ruby gems installed for a service are installed in the venfor
+# directory.
+bundle config set --local path 'vendor/bundle'
+
 sh -c "serverless-tools $*"

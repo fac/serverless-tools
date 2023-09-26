@@ -1,4 +1,4 @@
-FROM ruby:2.7-slim-bullseye
+FROM ruby:3.2.2-slim-bullseye
 
 ## Install System Dependencies
 RUN apt-get update -y
@@ -20,12 +20,11 @@ RUN echo \
 RUN apt-get update -y
 RUN apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
-## Install Serverless Tools
-COPY . .
+RUN mkdir /var/serverless-tools
+COPY . /var/serverless-tools
 
-RUN gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
-RUN bundle install
-RUN bundle exec rake install
+RUN cd /var/serverless-tools && gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)" \
+  && bundle install && bundle exec rake install
 
 COPY entrypoint.sh /entrypoint.sh
 
