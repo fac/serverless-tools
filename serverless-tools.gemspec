@@ -34,7 +34,7 @@ Gem::Specification.new do |spec|
 
   spec.post_install_message = "Serverless tools, and beyond!"
 
-  spec.add_development_dependency "bundler", "~> 2.3"
+  spec.add_development_dependency "bundler", "~> 2.4"
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rubocop"
 
@@ -47,6 +47,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "aws-sdk-lambda"
   spec.add_runtime_dependency "aws-sdk-s3"
   spec.add_runtime_dependency "aws-sdk-ecr"
+  spec.add_runtime_dependency "faraday-retry"
   spec.add_runtime_dependency "thor"
   spec.add_runtime_dependency "slack-ruby-client"
   spec.add_runtime_dependency "octokit"
