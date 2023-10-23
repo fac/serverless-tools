@@ -1,3 +1,7 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fac_serverless-tools&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=fac_serverless-tools)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=fac_serverless-tools&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=fac_serverless-tools)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=fac_serverless-tools&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=fac_serverless-tools)
+
 # serverless-tools
 A collection of tools used to ease the use of serverless projects.
 
