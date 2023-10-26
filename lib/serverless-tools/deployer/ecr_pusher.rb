@@ -41,6 +41,7 @@ module ServerlessTools
       def image_tags
         client.describe_images(
           repository_name: config.repo,
+          max_results: 1000,
           registry_id: config.registry_id
         ).image_details.flat_map(&:image_tags)
       end

@@ -74,6 +74,7 @@ module ServerlessTools::Deployer
           assert_equal(subject.output, expected)
           assert_equal(ecr.api_requests.first[:params], {
             repository_name: repo,
+            max_results: 1000,
             registry_id: registry_id,
           })
         end
