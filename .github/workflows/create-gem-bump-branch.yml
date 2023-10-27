@@ -51,7 +51,7 @@ jobs:
           bundle config unset deployment
           bundle install
 
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: ${{ github.event.inputs.version-bump-significance }} gem bump - ${{ github.actor }}
           file_pattern: 'action.yml Gemfile.lock lib/serverless-tools/version.rb'
