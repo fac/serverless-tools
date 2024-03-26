@@ -9,6 +9,7 @@ AllCops:
   Exclude:
     - "**/*.yml"
     - "**/*.py"
+    - "bin/bump_version"
   TargetRubyVersion: 2.7
 
 #################### Layout ################################
