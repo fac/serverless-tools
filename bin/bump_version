@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -e
+
+REPO_DIR="$(git rev-parse --show-toplevel)"
+GEM_FILE="${REPO_DIR}/lib/serverless-tools/version.rb"
+ACTION_FILE="${REPO_DIR}/action.yml"
+
+if [[ -z "$1" ]]; then
+  echo "Provide target version: next [major|minor|patch|pre|release] or a given version number [x.x.x]"
+  echo -e "e.g. \n'$0 minor' or \n'$0 1.0.0'"
+  exit 1
+fi
+
+sem_version_bump="$1"
+current_version="$(grep 'VERSION' "$GEM_FILE" | awk '{print $3}' | tr -d '"')"
+
+echo "Current version: ${current_version}"
+
+echo "Updating gem version ..."
+gem bump --version "$sem_version_bump" --no-commit
+
+new_version="$(grep 'VERSION' "$GEM_FILE" | awk '{print $3}' | tr -d '"')"
+
+echo "Updating Gemfile.lock"
+bundle install
+
+echo "Updating action version ..."
+sed -i "" "s/$current_version/$new_version/" "$ACTION_FILE"
