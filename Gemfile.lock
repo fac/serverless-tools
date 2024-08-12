@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    serverless-tools (0.17.16)
+    serverless-tools (0.17.17)
       aws-sdk-ecr
       aws-sdk-lambda
       aws-sdk-s3
