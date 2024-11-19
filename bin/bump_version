@@ -26,3 +26,5 @@ bundle install
 
 echo "Updating action version ..."
 sed -i "" "s/$current_version/$new_version/" "$ACTION_FILE"
+
+git add "$GEM_FILE" "$ACTION_FILE" Gemfile.lock && git commit -m "Bump serverless-tools to $new_version"
