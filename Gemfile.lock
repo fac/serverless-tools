@@ -51,7 +51,7 @@ GEM
       net-http
     faraday-retry (2.2.1)
       faraday (~> 2.0)
-    gem-release (2.2.2)
+    gem-release (2.2.3)
     gli (2.21.1)
     hashie (5.0.0)
     jmespath (1.6.2)
