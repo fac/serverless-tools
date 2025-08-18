@@ -6,6 +6,6 @@ inputs:
     required: true
 runs:
   using: "docker"
-  image: "docker://ghcr.io/fac/serverless-tools-gha:v0.19.12"
+  image: "docker://ghcr.io/fac/serverless-tools-gha:v0.19.13"
   args:
     - ${{ inputs.command }}
