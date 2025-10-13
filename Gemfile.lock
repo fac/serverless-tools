@@ -17,7 +17,7 @@ GEM
       public_suffix (>= 2.0.2, < 7.0)
     ast (2.4.3)
     aws-eventstream (1.4.0)
-    aws-partitions (1.1166.0)
+    aws-partitions (1.1172.0)
     aws-sdk-core (3.233.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
@@ -32,7 +32,7 @@ GEM
     aws-sdk-kms (1.113.0)
       aws-sdk-core (~> 3, >= 3.231.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-lambda (1.160.0)
+    aws-sdk-lambda (1.161.0)
       aws-sdk-core (~> 3, >= 3.231.0)
       aws-sigv4 (~> 1.5)
     aws-sdk-s3 (1.199.1)
@@ -42,7 +42,7 @@ GEM
     aws-sigv4 (1.12.1)
       aws-eventstream (~> 1, >= 1.0.2)
     base64 (0.3.0)
-    bigdecimal (3.2.3)
+    bigdecimal (3.3.1)
     faraday (2.14.0)
       faraday-net_http (>= 2.0, < 3.5)
       json
@@ -139,15 +139,15 @@ CHECKSUMS
   addressable (2.8.7) sha256=462986537cf3735ab5f3c0f557f14155d778f4b43ea4f485a9deb9c8f7c58232
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
   aws-eventstream (1.4.0) sha256=116bf85c436200d1060811e6f5d2d40c88f65448f2125bc77ffce5121e6e183b
-  aws-partitions (1.1166.0) sha256=feecbca0135081c37030c633ca2d106cdb6632ab1edf2e0a8321032e0e71dd2d
+  aws-partitions (1.1172.0) sha256=62809c443c36260f8d6c2e978ea49adcac497ca63f67568aae3e0e51e8341246
   aws-sdk-core (3.233.0) sha256=798db4e867d15dceb6504317867fc8013042984988199600c78e310d0058018a
   aws-sdk-ecr (1.110.0) sha256=9c58992c96e9b522deb86421d0fd8ee39d3e327130165495f00b79dfe11f75ff
   aws-sdk-kms (1.113.0) sha256=deb1d129c3cc9785c7ad2e625926c6286334fce65a0813f6d61dc24c9dda6929
-  aws-sdk-lambda (1.160.0) sha256=abb99459230e20958f0d949622406524f97f3ac33d8566eda4af6a2be43dd847
+  aws-sdk-lambda (1.161.0) sha256=09a9a5a0dfabd567989b015a54aed140d479f58b447f3fc94585f84b28e1e380
   aws-sdk-s3 (1.199.1) sha256=a36aba0e3a408e5c0822fff3be76676ec7e91e2c78cfb92db33c96596ecbcac6
   aws-sigv4 (1.12.1) sha256=6973ff95cb0fd0dc58ba26e90e9510a2219525d07620c8babeb70ef831826c00
   base64 (0.3.0) sha256=27337aeabad6ffae05c265c450490628ef3ebd4b67be58257393227588f5a97b
-  bigdecimal (3.2.3) sha256=ffd11d1ac67a0d3b2f44aec0a6487210b3f813f363dd11f1fcccf5ba00da4e1b
+  bigdecimal (3.3.1) sha256=eaa01e228be54c4f9f53bf3cc34fe3d5e845c31963e7fcc5bedb05a4e7d52218
   faraday (2.14.0) sha256=8699cfe5d97e55268f2596f9a9d5a43736808a943714e3d9a53e6110593941cd
   faraday-mashify (1.0.0) sha256=3684606afdcbb49913faf7f1fa9c1cca6259642589fdc857fd574e75cbf0542f
   faraday-multipart (1.1.1) sha256=77a18ff40149030fd1aef55bb4fc7a67ce46419a8a3fcd010e28c2526e8d8903
