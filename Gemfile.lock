@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    serverless-tools (0.19.25)
+    serverless-tools (0.19.26)
       aws-sdk-ecr
       aws-sdk-lambda
       aws-sdk-s3
@@ -182,7 +182,7 @@ CHECKSUMS
   ruby-progressbar (1.13.0) sha256=80fc9c47a9b640d6834e0dc7b3c94c9df37f08cb072b7761e4a71e22cff29b33
   ruby2_keywords (0.0.5) sha256=ffd13740c573b7301cf7a2e61fc857b2a8e3d3aff32545d6f8300d8bae10e3ef
   sawyer (0.9.2) sha256=fa3a72d62a4525517b18857ddb78926aab3424de0129be6772a8e2ba240e7aca
-  serverless-tools (0.19.25)
+  serverless-tools (0.19.26)
   slack-ruby-client (3.1.0) sha256=8198cefb065e6c48fd5c62fb84846c8ee23364aea62d4750be9430f81647e172
   test-unit (3.7.3) sha256=242e22c6df990f11fb6abc2507a238f80810a903291f90d8573261554488175e
   thor (1.4.0) sha256=8763e822ccb0f1d7bee88cde131b19a65606657b847cc7b7b4b82e772bcd8a3d
