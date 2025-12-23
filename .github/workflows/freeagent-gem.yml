@@ -10,16 +10,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
-      - uses: ruby/setup-ruby@v1
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: ruby/setup-ruby@d354de180d0c9e813cfddfcbdc079945d4be589b # v1.275.0
         with:
           bundler-cache: true # bundle install
       - name: Setup Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
         with:
           python-version: "3.9"
       - name: Setup Poetry # Required for testing but not for building the gem.
-        uses: abatilo/actions-poetry@v3.0.2
+        uses: abatilo/actions-poetry@65c61eae400c65c9510a584af85138c1ae19bbc0 # v3.0.2
         with:
           poetry-version: "1.1.13"
       - run: bundle install
@@ -33,11 +33,11 @@ jobs:
       version: ${{ steps.release-gem.outputs.pushed-version }}
 
     steps:
-      - uses: actions/checkout@v6
-      - uses: ruby/setup-ruby@v1
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: ruby/setup-ruby@d354de180d0c9e813cfddfcbdc079945d4be589b # v1.275.0
         with:
           bundler-cache: true
-      - uses: fac/ruby-gem-setup-credentials-action@v2
+      - uses: fac/ruby-gem-setup-credentials-action@5f62d5f2f56a11c7422a92f81fbb29af01e1c00f # v2
         with:
           token: ${{ secrets.github_token }}
 
@@ -48,14 +48,14 @@ jobs:
       - name: Release Gem
         id: release-gem
         if: ${{ github.ref == 'refs/heads/main' }}
-        uses: fac/ruby-gem-push-action@v2
+        uses: fac/ruby-gem-push-action@81d77bf568ff6659d7fae0f0c5a036bb0aeacb1a # v2
         with:
           key: github
 
       # PR branch builds will release pre-release gems
       - name: Pre-Release Gem
         if: ${{ github.ref != 'refs/heads/main' }}
-        uses: fac/ruby-gem-push-action@v2
+        uses: fac/ruby-gem-push-action@81d77bf568ff6659d7fae0f0c5a036bb0aeacb1a # v2
         with:
           key: github
           pre-release: true
