@@ -65,7 +65,8 @@ GEM
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
     logger (1.7.0)
-    minitest (5.26.2)
+    minitest (6.0.0)
+      prism (~> 1.5)
     mocha (2.8.2)
       ruby2_keywords (>= 0.0.5)
     multipart-post (2.4.1)
@@ -127,7 +128,7 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 2.4)
   gem-release
-  minitest (~> 5.0)
+  minitest (~> 6.0)
   mocha
   rake
   rexml
@@ -161,7 +162,7 @@ CHECKSUMS
   language_server-protocol (3.17.0.5) sha256=fd1e39a51a28bf3eec959379985a72e296e9f9acfce46f6a79d31ca8760803cc
   lint_roller (1.1.0) sha256=2c0c845b632a7d172cb849cc90c1bce937a28c5c8ccccb50dfd46a485003cc87
   logger (1.7.0) sha256=196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203
-  minitest (5.26.2) sha256=f021118a6185b9ba9f5af71f2ba103ad770c75afde9f2ab8da512677c550cde3
+  minitest (6.0.0) sha256=4ca597fc1d735ea18d2b4b98c5fb1d5a6da4a6f35ddf32bd5fa3eded33a453be
   mocha (2.8.2) sha256=1f77e729db47e72b4ef776461ce20caeec2572ffdf23365b0a03608fee8f4eee
   multipart-post (2.4.1) sha256=9872d03a8e552020ca096adadbf5e3cb1cd1cdd6acd3c161136b8a5737cdb4a8
   net-http (0.8.0) sha256=df42c47ce9f9e95ad32a317c97c12f945bc1af365288837ea4ff259876ecb46d
