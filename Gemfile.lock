@@ -116,7 +116,7 @@ GEM
       logger
     test-unit (3.7.7)
       power_assert
-    thor (1.4.0)
+    thor (1.5.0)
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)
     unicode-emoji (4.2.0)
@@ -186,7 +186,7 @@ CHECKSUMS
   serverless-tools (0.19.26)
   slack-ruby-client (3.1.0) sha256=8198cefb065e6c48fd5c62fb84846c8ee23364aea62d4750be9430f81647e172
   test-unit (3.7.7) sha256=3c89d5ff0690a16bef9946156c4624390402b9d54dfcf4ce9cbd5b06bead1e45
-  thor (1.4.0) sha256=8763e822ccb0f1d7bee88cde131b19a65606657b847cc7b7b4b82e772bcd8a3d
+  thor (1.5.0) sha256=e3a9e55fe857e44859ce104a84675ab6e8cd59c650a49106a05f55f136425e73
   unicode-display_width (3.2.0) sha256=0cdd96b5681a5949cdbc2c55e7b420facae74c4aaf9a9815eee1087cb1853c42
   unicode-emoji (4.2.0) sha256=519e69150f75652e40bf736106cfbc8f0f73aa3fb6a65afe62fefa7f80b0f80f
   uri (1.1.1) sha256=379fa58d27ffb1387eaada68c749d1426738bd0f654d812fcc07e7568f5c57c6
