@@ -13,7 +13,7 @@ module ServerlessTools::Deployer
     describe "#build" do
       it "builds the Docker image" do
         subject.expects(:system_call).with(
-          "docker build . -f Dockerfile -t function_one_ecr_repo:latest"
+          "docker build . -f Dockerfile -t function_one_ecr_repo:latest  --output type=docker --provenance=false"
         )
         subject.build
       end
@@ -29,7 +29,7 @@ module ServerlessTools::Deployer
         }
         it "builds the image for the specific platform" do
           subject.expects(:system_call).with(
-            "docker build . -f Dockerfile -t function_one_ecr_repo:latest --platform linux/amd64"
+            "docker build . -f Dockerfile -t function_one_ecr_repo:latest --platform linux/amd64 --output type=docker --provenance=false"
           )
           subject.build
         end

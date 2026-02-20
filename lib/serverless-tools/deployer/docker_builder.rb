@@ -12,7 +12,7 @@ module ServerlessTools
       end
 
       def build
-        system_call "docker build . -f #{config.dockerfile} -t #{local_image_name} #{platform}".rstrip
+        system_call "docker build . -f #{config.dockerfile} -t #{local_image_name} #{platform} --output type=docker --provenance=false".rstrip
       end
 
       def output
