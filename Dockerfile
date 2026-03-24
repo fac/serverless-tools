@@ -1,12 +1,12 @@
-FROM ruby:3.2.2-slim-bullseye
+FROM ruby:3.4.8-slim-bookworm
 
 ## Install System Dependencies
 RUN apt-get update -y
-RUN apt-get install -y git zip curl ca-certificates gnupg lsb-release python3.9 python3-venv python3-pip awscli
+RUN apt-get install -y git zip curl ca-certificates gnupg lsb-release python3 python3-venv python3-pip awscli
 
 ## Setup Python
 ENV POETRY_HOME=/etc/poetry
-RUN curl -sSL https://install.python-poetry.org | python3.9 - --version 1.1.13
+RUN curl -sSL https://install.python-poetry.org | python3 - --version 2.2.1
 ENV PATH="${PATH}:/${POETRY_HOME}/bin"
 
 ## Setup Docker https://docs.docker.com/engine/install/debian/
