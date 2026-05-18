@@ -21,7 +21,7 @@ jobs:
       - name: Setup Poetry # Required for testing but not for building the gem.
         uses: abatilo/actions-poetry@65c61eae400c65c9510a584af85138c1ae19bbc0 # v3.0.2
         with:
-          poetry-version: "1.1.13"
+          poetry-version: "2.2.1"
       - run: bundle install
       - run: bundle exec rake test
 
