@@ -12,11 +12,11 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
-          python-version: "3.9"
+          python-version: "3.13"
       - name: Setup Poetry
         uses: abatilo/actions-poetry@65c61eae400c65c9510a584af85138c1ae19bbc0 # v3.0.2
         with:
-          poetry-version: "1.1.13"
+          poetry-version: "2.2.1"
       - run: bundle install
       - run: bundle exec rake test
 
