@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    serverless-tools (0.20.2)
+    serverless-tools (0.20.3)
       aws-sdk-ecr
       aws-sdk-lambda
       aws-sdk-s3
@@ -152,7 +152,6 @@ CHECKSUMS
   aws-sigv4 (1.12.1) sha256=6973ff95cb0fd0dc58ba26e90e9510a2219525d07620c8babeb70ef831826c00
   base64 (0.3.0) sha256=27337aeabad6ffae05c265c450490628ef3ebd4b67be58257393227588f5a97b
   bigdecimal (4.1.2) sha256=53d217666027eab4280346fba98e7d5b66baaae1b9c3c1c0ffe89d48188a3fbd
-  bundler (4.0.12) sha256=7f8b757d28dfb636e7b24fba2344ac6dd13b5b24f4b46d62573d483f211825ac
   drb (2.2.3) sha256=0b00d6fdb50995fe4a45dea13663493c841112e4068656854646f418fda13373
   faraday (2.14.2) sha256=73ccb9994a9e8648f010e32eca2ae82e41c57860aa10932cda29418b9e0223ad
   faraday-mashify (1.0.2) sha256=ebdc93b3f807af9a4b18c3d967fc7bcda01e297aed9cc2015ffe8db6e7add2e9
@@ -188,7 +187,7 @@ CHECKSUMS
   ruby-progressbar (1.13.0) sha256=80fc9c47a9b640d6834e0dc7b3c94c9df37f08cb072b7761e4a71e22cff29b33
   ruby2_keywords (0.0.5) sha256=ffd13740c573b7301cf7a2e61fc857b2a8e3d3aff32545d6f8300d8bae10e3ef
   sawyer (0.9.3) sha256=0d0f19298408047037638639fe62f4794483fb04320269169bd41af2bdcf5e41
-  serverless-tools (0.20.2)
+  serverless-tools (0.20.3)
   slack-ruby-client (3.1.0) sha256=8198cefb065e6c48fd5c62fb84846c8ee23364aea62d4750be9430f81647e172
   test-unit (3.7.7) sha256=3c89d5ff0690a16bef9946156c4624390402b9d54dfcf4ce9cbd5b06bead1e45
   thor (1.5.0) sha256=e3a9e55fe857e44859ce104a84675ab6e8cd59c650a49106a05f55f136425e73
