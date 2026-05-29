@@ -48,14 +48,14 @@ jobs:
       - name: Release Gem
         id: release-gem
         if: ${{ github.ref == 'refs/heads/main' }}
-        uses: fac/ruby-gem-push-action@81d77bf568ff6659d7fae0f0c5a036bb0aeacb1a # v2
+        uses: fac/ruby-gem-push-action@ec8d814ef3539180663d51a63bedc75fe2b61a58 # v2
         with:
           key: github
 
       # PR branch builds will release pre-release gems
       - name: Pre-Release Gem
         if: ${{ github.ref != 'refs/heads/main' }}
-        uses: fac/ruby-gem-push-action@81d77bf568ff6659d7fae0f0c5a036bb0aeacb1a # v2
+        uses: fac/ruby-gem-push-action@ec8d814ef3539180663d51a63bedc75fe2b61a58 # v2
         with:
           key: github
           pre-release: true
