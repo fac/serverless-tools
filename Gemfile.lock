@@ -17,7 +17,7 @@ GEM
       public_suffix (>= 2.0.2, < 8.0)
     ast (2.4.3)
     aws-eventstream (1.4.0)
-    aws-partitions (1.1257.0)
+    aws-partitions (1.1258.0)
     aws-sdk-core (3.251.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
@@ -26,13 +26,13 @@ GEM
       bigdecimal
       jmespath (~> 1, >= 1.6.1)
       logger
-    aws-sdk-ecr (1.129.0)
+    aws-sdk-ecr (1.130.0)
       aws-sdk-core (~> 3, >= 3.248.0)
       aws-sigv4 (~> 1.5)
     aws-sdk-kms (1.129.0)
       aws-sdk-core (~> 3, >= 3.248.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-lambda (1.181.0)
+    aws-sdk-lambda (1.182.0)
       aws-sdk-core (~> 3, >= 3.248.0)
       aws-sigv4 (~> 1.5)
     aws-sdk-s3 (1.224.0)
@@ -143,11 +143,11 @@ CHECKSUMS
   addressable (2.9.0) sha256=7fdf6ac3660f7f4e867a0838be3f6cf722ace541dd97767fa42bc6cfa980c7af
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
   aws-eventstream (1.4.0) sha256=116bf85c436200d1060811e6f5d2d40c88f65448f2125bc77ffce5121e6e183b
-  aws-partitions (1.1257.0) sha256=03c531f40fdd979a9ae2aae70140c60e59000e6f62a60b3d6171b78cdded960c
+  aws-partitions (1.1258.0) sha256=3fee017570594ecf5e7f4c845b115fef8000530e57bdaf2b927357e5bf08967f
   aws-sdk-core (3.251.0) sha256=ef8186cb5509147e590310da58fab4c5b0901eba0e85a72955abdf772e425c87
-  aws-sdk-ecr (1.129.0) sha256=713b5a152d74fea305b8a41d2bf8681302c7fba27a6c9bcb2f66922ce40509ae
+  aws-sdk-ecr (1.130.0) sha256=fec1c3bd5434a39d3f04dcca08cb04413a6a9509b24a3610e701e1a4060641cd
   aws-sdk-kms (1.129.0) sha256=363f548df321f4a4fcfd05523384e591060b400f8e65133ed7ef0793155a3343
-  aws-sdk-lambda (1.181.0) sha256=6c9c39b2055cde61e094e8df08babd1af111639f48839e254308c57f7a3ff7ed
+  aws-sdk-lambda (1.182.0) sha256=ec1b461ad82af7a1a1c1df56f13a41c537071070c29ad8550cf53669bce85037
   aws-sdk-s3 (1.224.0) sha256=7d443c4ae9eda795b60e081d41f49b498e2483f1fc204f3239176ec922ed7879
   aws-sigv4 (1.12.1) sha256=6973ff95cb0fd0dc58ba26e90e9510a2219525d07620c8babeb70ef831826c00
   base64 (0.3.0) sha256=27337aeabad6ffae05c265c450490628ef3ebd4b67be58257393227588f5a97b
