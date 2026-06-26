@@ -66,6 +66,7 @@ module ServerlessTools
                       .split(Regexp.union(delimiters))
                       .map(&:downcase)
                       .join(".")
+                      .gsub("-.", "-")
                       .delete("'")
 
         "<#{run_url}|#{@repo_name}/#{head_branch} ##{run_number}> for @#{slack_name}"
